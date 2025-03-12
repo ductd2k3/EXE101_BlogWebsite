@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace LingoVerse.Models;
 
-public partial class Level
+public partial class Category
 {
-    public int LevelId { get; set; }
+    public int CategoryId { get; set; }
 
-    public string LevelName { get; set; } = null!;
-
-    public string? Description { get; set; }
+    public string CategoryName { get; set; } = null!;
 
     public bool IsDeleted { get; set; }
 
