@@ -1,0 +1,92 @@
+﻿@page
+@model LingoVerse.Pages.User.PremiumModel
+@{
+}
+<head>
+    <link rel="stylesheet" href="~/css/Premium.css" asp-append-version="true" />
+</head>
+<div class="premium-container container">
+    <h2>Chọn Gói Premium</h2>
+    <div class="row g-4">
+        <!-- Gói 1 Tháng -->
+        <div class="col-md-4">
+            <div class="premium-card">
+                <h3>Gói 1 Tháng</h3>
+                <div class="price">99.000 VNĐ <span>/ tháng</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
+                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
+                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
+                </ul>
+                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="1 Tháng" data-price="99.000 VNĐ">Đăng Ký Ngay</button>
+            </div>
+        </div>
+        <!-- Gói 6 Tháng -->
+        <div class="col-md-4">
+            <div class="premium-card">
+                <h3>Gói 6 Tháng</h3>
+                <div class="price">499.000 VNĐ <span>/ 6 tháng</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
+                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
+                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
+                </ul>
+                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="6 Tháng" data-price="499.000 VNĐ">Đăng Ký Ngay</button>
+            </div>
+        </div>
+        <!-- Gói 12 Tháng -->
+        <div class="col-md-4">
+            <div class="premium-card">
+                <h3>Gói 12 Tháng</h3>
+                <div class="price">899.000 VNĐ <span>/ năm</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
+                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
+                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
+                </ul>
+                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="12 Tháng" data-price="899.000 VNĐ">Đăng Ký Ngay</button>
+            </div>
+        </div>
+    </div>
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Thanh Toán Gói Premium</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="QR Code Thanh Toán">
+                    <p><strong>Gói:</strong> <span id="modal-plan"></span></p>
+                    <p><strong>Số tiền:</strong> <span id="modal-price"></span></p>
+                    <p><strong>Ngân hàng:</strong> Vietcombank</p>
+                    <p><strong>Số tài khoản:</strong> 1234 5678 9012 3456</p>
+                    <p><strong>Chủ tài khoản:</strong> Công ty Học Ngoại Ngữ Qua Báo</p>
+                    <p>Vui lòng quét mã QR hoặc chuyển khoản theo thông tin trên để hoàn tất đăng ký.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-premium" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript để cập nhật thông tin trong modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var paymentModal = document.getElementById('paymentModal');
+        paymentModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Nút đã được nhấn
+            var plan = button.getAttribute('data-plan');
+            var price = button.getAttribute('data-price');
+
+            var modalPlan = paymentModal.querySelector('#modal-plan');
+            var modalPrice = paymentModal.querySelector('#modal-price');
+
+            modalPlan.textContent = plan;
+            modalPrice.textContent = price;
+        });
+    });
+</script>

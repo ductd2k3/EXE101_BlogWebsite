@@ -1,0 +1,52 @@
+﻿body {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #e0e1dd;
+    font-family: 'Arial', sans-serif;
+}
+
+.header {
+    background: linear-gradient(90deg, #1b263b 0%, #415a77 50%, #778da9 100%);
+    box-shadow: 0 5px 15px rgba(65, 90, 119, 0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+    .header .navbar-brand {
+        background: linear-gradient(135deg, #00b4d8, #e0e1dd); /* Gradient cho logo */
+        -webkit-background-clip: text; /* Áp dụng gradient cho chữ */
+        -webkit-text-fill-color: transparent; /* Làm chữ trong suốt để thấy gradient */
+        font-size: 1.8rem;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+        transition: transform 0.3s;
+        display: flex;
+        align-items: center;
+    }
+
+        .header .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+    .header .nav-link {
+        background: linear-gradient(135deg, #e0e1dd, #00b4d8); /* Gradient cho các link */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 10px 20px;
+        border-radius: 20px;
+        transition: all 0.3s;
+    }
+
+        .header .nav-link:hover {
+            background: linear-gradient(135deg, #4361ee, #00b4d8); /* Gradient khi hover */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+        }
+
+
+
+footer {
+    background: linear-gradient(to top, #0d1b2a, #1b263b);
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+}
