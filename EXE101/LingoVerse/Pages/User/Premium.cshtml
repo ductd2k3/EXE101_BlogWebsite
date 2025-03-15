@@ -1,54 +1,65 @@
 ﻿@page
 @model LingoVerse.Pages.User.PremiumModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Text.Json
 @{
+    string userJson = HttpContextAccessor.HttpContext?.Session.GetString("UserSession");
+    Models.User user = userJson != null ? JsonSerializer.Deserialize<Models.User>(userJson) : null;
+    bool isLoggedIn = user != null;
+    string userIdStr = isLoggedIn ? user.UserId.ToString("D4") : "0000";
 }
 <head>
     <link rel="stylesheet" href="~/css/Premium.css" asp-append-version="true" />
+    <style>
+        .timer-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff5722;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .failure {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <div class="premium-container container">
     <h2>Chọn Gói Premium</h2>
     <div class="row g-4">
-        <!-- Gói 1 Tháng -->
-        <div class="col-md-4">
-            <div class="premium-card">
-                <h3>Gói 1 Tháng</h3>
-                <div class="price">99.000 VNĐ <span>/ tháng</span></div>
-                <ul>
-                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
-                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
-                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
-                </ul>
-                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="1 Tháng" data-price="99.000 VNĐ">Đăng Ký Ngay</button>
+        @foreach (var premium in Model.premiumPlans)
+        {
+            <div class="col-md-4">
+                <div class="premium-card">
+                    <h3>@premium.PlanName</h3>
+                    <div class="price">@premium.Price.ToString("N0") VNĐ</div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> @premium.Description</li>
+                        <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
+                        <li><i class="fas fa-check"></i> Không quảng cáo</li>
+                        <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
+                    </ul>
+                    <button class="btn btn-premium"
+                            data-plan="@premium.PlanName"
+                            data-plan-id="@premium.PlanId"
+                            data-price="@premium.Price.ToString("N0")"
+                    @(isLoggedIn ? "data-bs-toggle=modal data-bs-target=#paymentModal" : "onclick=window.location.href='/User/Login'")>
+                        Đăng Ký Ngay
+                    </button>
+                </div>
             </div>
-        </div>
-        <!-- Gói 6 Tháng -->
-        <div class="col-md-4">
-            <div class="premium-card">
-                <h3>Gói 6 Tháng</h3>
-                <div class="price">499.000 VNĐ <span>/ 6 tháng</span></div>
-                <ul>
-                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
-                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
-                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
-                </ul>
-                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="6 Tháng" data-price="499.000 VNĐ">Đăng Ký Ngay</button>
-            </div>
-        </div>
-        <!-- Gói 12 Tháng -->
-        <div class="col-md-4">
-            <div class="premium-card">
-                <h3>Gói 12 Tháng</h3>
-                <div class="price">899.000 VNĐ <span>/ năm</span></div>
-                <ul>
-                    <li><i class="fas fa-check"></i> Truy cập bài báo nâng cao</li>
-                    <li><i class="fas fa-check"></i> Không quảng cáo</li>
-                    <li><i class="fas fa-check"></i> Hỗ trợ học tập cá nhân hóa</li>
-                </ul>
-                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#paymentModal" data-plan="12 Tháng" data-price="899.000 VNĐ">Đăng Ký Ngay</button>
-            </div>
-        </div>
+        }
     </div>
-    <!-- Payment Modal -->
+
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -57,12 +68,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="QR Code Thanh Toán">
+                    <img src="" alt="QR Code Thanh Toán" id="qr-code">
                     <p><strong>Gói:</strong> <span id="modal-plan"></span></p>
                     <p><strong>Số tiền:</strong> <span id="modal-price"></span></p>
-                    <p><strong>Ngân hàng:</strong> Vietcombank</p>
-                    <p><strong>Số tài khoản:</strong> 1234 5678 9012 3456</p>
-                    <p><strong>Chủ tài khoản:</strong> Công ty Học Ngoại Ngữ Qua Báo</p>
+                    <p><strong>Nội dung:</strong> <span id="payment-code"></span></p>
+                    <p><strong>Ngân hàng:</strong> TPBank</p>
+                    <p><strong>Số tài khoản:</strong> 00003480126</p>
+                    <p><strong>Chủ tài khoản:</strong> Trần Đình Đức</p>
+                    <div class="timer-container">
+                        <p>Thời gian còn lại: <span id="timer" class="timer">03:00</span></p>
+                        <p id="payment-status"></p>
+                    </div>
                     <p>Vui lòng quét mã QR hoặc chuyển khoản theo thông tin trên để hoàn tất đăng ký.</p>
                 </div>
                 <div class="modal-footer">
@@ -73,20 +89,108 @@
     </div>
 </div>
 
-<!-- JavaScript để cập nhật thông tin trong modal -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var paymentModal = document.getElementById('paymentModal');
-        paymentModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // Nút đã được nhấn
-            var plan = button.getAttribute('data-plan');
-            var price = button.getAttribute('data-price');
+        const paymentModal = document.getElementById('paymentModal');
+        const qrBaseUrl = 'https://qr.sepay.vn/img?acc=00003480126&bank=TPBank&amount=';
+        const userIdStr = '@userIdStr';
+        const isLoggedIn = @Json.Serialize(isLoggedIn);
+        let currentPaymentCode = '';
+        let timerInterval = null;
+        let checkInterval = null;
+        const totalTime = 3 * 60 * 1000; // 3 phút
+        let remainingTime = totalTime;
 
-            var modalPlan = paymentModal.querySelector('#modal-plan');
-            var modalPrice = paymentModal.querySelector('#modal-price');
+        paymentModal.addEventListener('show.bs.modal', function (event) {
+            if (!isLoggedIn) return;
+
+            const button = event.relatedTarget;
+            const plan = button.getAttribute('data-plan');
+            const planId = button.getAttribute('data-plan-id');
+            const price = button.getAttribute('data-price');
+
+            const now = new Date();
+            const timestamp = now.getUTCFullYear().toString().slice(-2) +
+                String(now.getUTCMonth() + 1).padStart(2, '0') +
+                String(now.getUTCDate()).padStart(2, '0') +
+                String(now.getUTCHours()).padStart(2, '0') +
+                String(now.getUTCMinutes()).padStart(2, '0');
+            currentPaymentCode = `${userIdStr}${timestamp}`;
+
+            const modalPlan = document.getElementById('modal-plan');
+            const modalPrice = document.getElementById('modal-price');
+            const paymentCodeSpan = document.getElementById('payment-code');
+            const qrImage = document.getElementById('qr-code');
+            const timerDisplay = document.getElementById('timer');
+            const paymentStatus = document.getElementById('payment-status');
 
             modalPlan.textContent = plan;
-            modalPrice.textContent = price;
+            modalPrice.textContent = `${price} VNĐ`;
+            paymentCodeSpan.textContent = currentPaymentCode;
+            paymentStatus.textContent = '';
+
+            const cleanPrice = price.replace(/[^0-9]/g, '');
+            qrImage.src = `${qrBaseUrl}${cleanPrice}&des=${currentPaymentCode}`;
+
+            remainingTime = totalTime;
+            updateTimerDisplay(timerDisplay);
+            startTimer(timerDisplay, paymentStatus);
+            startPaymentCheck(planId, currentPaymentCode, paymentStatus);
         });
+
+        paymentModal.addEventListener('hidden.bs.modal', function () {
+            clearInterval(timerInterval);
+            clearInterval(checkInterval);
+        });
+
+        function updateTimerDisplay(timerElement) {
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startTimer(timerElement, statusElement) {
+            timerInterval = setInterval(() => {
+                remainingTime -= 1000;
+                updateTimerDisplay(timerElement);
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    clearInterval(checkInterval);
+                    statusElement.textContent = 'Thanh toán thất bại: Hết thời gian!';
+                    statusElement.className = 'failure';
+                    setTimeout(() => paymentModal.querySelector('.btn-close').click(), 2000);
+                }
+            }, 1000);
+        }
+
+        function startPaymentCheck(planId, paymentCode, statusElement) {
+            checkInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/User/Premium?handler=CheckPayment&paymentCode=${encodeURIComponent(paymentCode)}&planId=${planId}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        clearInterval(timerInterval);
+                        clearInterval(checkInterval);
+                        statusElement.textContent = result.message || 'Thanh toán thành công!';
+                        statusElement.className = 'success';
+                        setTimeout(() => paymentModal.querySelector('.btn-close').click(), 3000);
+                    } else if (remainingTime > 0) {
+                        console.log('Payment not yet confirmed:', result.message);
+                    }
+                } catch (error) {
+                    clearInterval(timerInterval);
+                    clearInterval(checkInterval);
+                    statusElement.textContent = 'Lỗi hệ thống, vui lòng thử lại!';
+                    statusElement.className = 'failure';
+                    setTimeout(() => paymentModal.querySelector('.btn-close').click(), 2000);
+                }
+            }, 3000); // Kiểm tra mỗi 3 giây
+        }
     });
 </script>

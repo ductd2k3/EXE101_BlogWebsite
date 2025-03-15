@@ -108,3 +108,27 @@
     color: #778da9;
     cursor: not-allowed;
 }
+.filter-selects {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    max-width: 500px;
+    margin: 10px auto;
+}
+
+    .filter-selects select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid #778da9;
+        color: #e0e1dd;
+        border-radius: 20px;
+        padding: 8px 15px;
+        width: 100%;
+        transition: all 0.3s;
+    }
+
+        .filter-selects select:hover, .filter-selects select:focus {
+            background: rgba(65, 90, 119, 0.8);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
+            outline: none;
+        }

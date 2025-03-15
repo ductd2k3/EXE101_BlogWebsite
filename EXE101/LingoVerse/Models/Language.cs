@@ -9,5 +9,11 @@ public partial class Language
 
     public string LanguageName { get; set; } = null!;
 
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+    public string LanguageCode { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
+
+    public virtual ICollection<OfficialPost> OfficialPosts { get; set; } = new List<OfficialPost>();
+
+    public virtual ICollection<Set> Sets { get; set; } = new List<Set>();
 }

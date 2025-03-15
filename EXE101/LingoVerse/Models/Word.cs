@@ -15,7 +15,9 @@ public partial class Word
 
     public string? Example { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public virtual Set Set { get; set; } = null!;
 }

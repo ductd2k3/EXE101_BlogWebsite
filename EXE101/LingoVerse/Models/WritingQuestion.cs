@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LingoVerse.Models;
 
-public partial class Question
+public partial class WritingQuestion
 {
     public int QuestionId { get; set; }
 
@@ -11,9 +11,7 @@ public partial class Question
 
     public string QuestionText { get; set; } = null!;
 
-    public string? Answer { get; set; }
+    public bool IsDeleted { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
-
-    public virtual Post Post { get; set; } = null!;
+    public virtual OfficialPost Post { get; set; } = null!;
 }

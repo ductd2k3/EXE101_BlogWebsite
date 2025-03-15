@@ -9,30 +9,39 @@
 <div class="container search-filter-container">
     <div class="search-bar">
         <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Tìm kiếm bài báo..." aria-label="Search">
+            <input class="form-control me-2" asp-for="SearchTerm" type="search" placeholder="Tìm kiếm bài báo..." aria-label="Search">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
-    <div class="filter-selects">
-        <select class="form-select">
-            <option value="">Chọn ngôn ngữ</option>
-            <option value="english">Tiếng Anh</option>
-            <option value="french">Tiếng Pháp</option>
-            <option value="japanese">Tiếng Nhật</option>
-        </select>
-        <select class="form-select">
-            <option value="">Chọn cấp độ</option>
-            <option value="beginner">Sơ cấp</option>
-            <option value="intermediate">Trung cấp</option>
-            <option value="advanced">Nâng cao</option>
-        </select>
-        <select id="category" class="form-select">
-            <option value="">Chọn chủ đề</option>
-            <option value="news">Tin tức</option>
-            <option value="science">Khoa học</option>
-            <option value="sports">Thể thao</option>
-        </select>
-    </div>
+    <form method="get">
+        <div class="filter-selects">
+            <input asp-for="SearchTerm" type="hidden">
+
+            <select class="form-select" asp-for="LanguageId" onchange="this.form.submit()">
+                <option value="">Chọn ngôn ngữ</option>
+                @foreach (var language in Model.Languages)
+                {
+                    <option value="@(language.LanguageId)">@(language.LanguageName)</option>
+                }
+            </select>
+
+            <select class="form-select" asp-for="LevelId" onchange="this.form.submit()">
+                <option value="">Chọn cấp độ</option>
+                @foreach (var level in Model.Levels)
+                {
+                    <option value="@(level.LevelId)">@(level.LevelName)</option>
+                }
+            </select>
+
+            <select id="category" class="form-select" asp-for="CategoryId" onchange="this.form.submit()">
+                <option value="">Chọn chủ đề</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@(category.CategoryId)">@(category.CategoryName)</option>
+                }
+            </select>
+        </div>
+    </form>
 </div>
 
 <!-- Main Content -->
@@ -44,43 +53,18 @@
                 <h2><i class="fas fa-fire"></i>Tin Hot</h2>
                 <div class="hot-news-list swiper">
                     <div class="swiper-wrapper">
-                        <a href="/User/Post-Detail" class="hot-news-item swiper-slide text-decoration-none">
-                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="AI Revolution">
-                            <div class="content">
-                                <span class="category-label">English - Advanced</span>
-                                <h5>AI Revolution Unveiled</h5>
-                                <h5>Tiếng việt ở đây</h5>
-                                <p>Breaking news about artificial intelligence...</p>
-                                <p><small><i class="far fa-clock"></i> 1 giờ trước</small></p>
-                            </div>
-                        </a>
-                        <a href="/User/Post-Detail" class="hot-news-item swiper-slide text-decoration-none">
-                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="Nouvelle Technologie">
-                            <div class="content">
-                                <span class="category-label">French - Intermediate</span>
-                                <h5>Nouvelle Technologie</h5>
-                                <p>Un regard sur les innovations récentes...</p>
-                                <p><small><i class="far fa-clock"></i> 2 giờ trước</small></p>
-                            </div>
-                        </a>
-                        <a href="/User/Post-Detail" class="hot-news-item swiper-slide text-decoration-none">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="New Tech Era">
-                            <div class="content">
-                                <span class="category-label">Japanese - Beginner</span>
-                                <h5>新しい技術の時代</h5>
-                                <p>技術革新の最新情報...</p>
-                                <p><small><i class="far fa-clock"></i> 3 giờ trước</small></p>
-                            </div>
-                        </a>
-                        <a href="/User/Post-Detail" class="hot-news-item swiper-slide text-decoration-none">
-                            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="Nouvelle Technologie">
-                            <div class="content">
-                                <span class="category-label">French - Intermediate</span>
-                                <h5>Nouvelle Technologie</h5>
-                                <p>Un regard sur les innovations récentes...</p>
-                                <p><small><i class="far fa-clock"></i> 2 giờ trước</small></p>
-                            </div>
-                        </a>
+                        @foreach(var post in Model.Posts.Take(6))
+                        {
+                            <a href="/User/Post-Detail" class="hot-news-item swiper-slide text-decoration-none">
+                                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="Nouvelle Technologie">
+                                <div class="content">
+                                    <span class="category-label">@(post.Language.LanguageName) - @(post.Level.LevelName)</span>
+                                    <h5>@(post.Title)</h5>
+                                    <p>@(post.Content)</p>
+                                    <p><small><i class="far fa-clock"></i> 2 giờ trước</small></p>
+                                </div>
+                            </a>
+                        }
                     </div>
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
@@ -90,54 +74,45 @@
 
             <!-- News Section -->
             <div class="news-section">
-                <a href="/User/Post-Detail" class="featured-news text-decoration-none">
-                    <img src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=180&w=300" alt="AI Breakthrough">
-                    <div class="content">
-                        <span class="category-label">English - Intermediate</span>
-                        <h5 class="card-title">AI Breakthrough in 2049</h5>
-                        <p>A glimpse into the future with new inventions that could change the way we live and work...</p>
-                        <p><small><i class="far fa-clock"></i> 2 giờ trước</small>
-                    </div>
-                </a>
+                @foreach (var post in Model.Posts.Skip(6).Take(1))
+                {
+                    <a href="/User/Post-Detail" class="featured-news text-decoration-none">
+                        <img src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=180&w=300" alt="AI Breakthrough">
+                        <div class="content">
+                            <span class="category-label">@(post.Language.LanguageName) - @(post.Level.LevelName)</span>
+                            <h5 class="card-title">@(post.Title)</h5>
+                            <p>@(post.Content)</p>
+                            <p><small><i class="far fa-clock"></i> 2 giờ trước</small>
+                        </div>
+                    </a>
+                }
                 <div class="double-news">
-                    <a href="/User/Post-Detail" class="double-news-item text-decoration-none">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=110&w=200" alt="Nouvelle Ère">
-                        <div class="content">
-                            <span class="category-label">French - Beginner</span>
-                            <h5 class="card-title">Une Nouvelle Ère d'IA</h5>
-                            <p>Un aperçu de l'avenir...</p>
-                            <p><small><i class="far fa-clock"></i> 1 giờ trước</small></p>
-                        </div>
-                    </a>
-                    <a href="/User/Post-Detail" class="double-news-item text-decoration-none">
-                        <img src="https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=100&w=150" alt="AI Revolution">
-                        <div class="content">
-                            <span class="category-label">Japanese - Advanced</span>
-                            <h5 class="card-title">2049年のAI革命</h5>
-                            <p>新しい発明による未来...</p>
-                            <p><small><i class="far fa-clock"></i> 3 giờ trước</small></p>
-                        </div>
-                    </a>
+                    @foreach (var post in Model.Posts.Skip(7).Take(2))
+                    {
+                        <a href="/User/Post-Detail" class="double-news-item text-decoration-none">
+                            <img src="https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=100&w=150" alt="AI Revolution">
+                            <div class="content">
+                                <span class="category-label">@(post.Language.LanguageName) - @(post.Level.LevelName)</span>
+                                <h5 class="card-title">@(post.Title)</h5>
+                                <p>@(post.Content)</p>
+                                <p><small><i class="far fa-clock"></i> 3 giờ trước</small></p>
+                            </div>
+                        </a>
+                    }
                 </div>
                 <div class="news-list">
-                    <a href="/User/Post-Detail" class="list-item text-decoration-none">
-                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=120&w=200" alt="Learning AI">
-                        <div class="content">
-                            <span class="category-label">English - Beginner</span>
-                            <h5 class="card-title">Learning AI Basics</h5>
-                            <p>Start your journey with artificial intelligence...</p>
-                            <p><small><i class="far fa-clock"></i> 4 giờ trước</small> <span class="read-more">
-                        </div>
-                    </a>
-                    <a href="/User/Post-Detail" class="list-item text-decoration-none">
-                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=100&w=150" alt="IA Futur">
-                        <div class="content">
-                            <span class="category-label">French - Advanced</span>
-                            <h5 class="card-title">L'IA dans le Futur</h5>
-                            <p>Une exploration des avancées technologiques...</p>
-                            <p><small><i class="far fa-clock"></i> 5 giờ trước</small> <span class="read-more">
-                        </div>
-                    </a>
+                    @foreach (var post in Model.Posts.Skip(9).Take(2))
+                    {
+                        <a href="/User/Post-Detail" class="list-item text-decoration-none">
+                            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=100&w=150" alt="IA Futur">
+                            <div class="content">
+                                <span class="category-label">@(post.Language.LanguageName) - @(post.Level.LevelName)</span>
+                                <h5 class="card-title">@(post.Title)</h5>
+                                <p>@(post.Content)</p>
+                                <p><small><i class="far fa-clock"></i> 5 giờ trước</small> <span class="read-more">
+                            </div>
+                        </a>
+                    }
                 </div>
             </div>
 

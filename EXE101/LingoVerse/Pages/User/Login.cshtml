@@ -1,6 +1,8 @@
 ﻿@page
 @model LingoVerse.Pages.User.LoginModel
 @{
+    string errorMessage = TempData["ErrorMessage"] as string;
+    string successMessage = TempData["SuccessMessage"] as string;
 }
 <style>
     .login-container {
@@ -61,16 +63,41 @@
         p{
             color: #e0e1dd;
         }
+    /* Giữ nguyên style cũ, thêm style cho toast */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        color: white;
+        font-size: 14px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+    .toast-error {
+        background: #ff4d4d;
+    }
+
+    .toast-success {
+        background: #00b4d8;
+    }
 </style>
 <!-- Login Form -->
 <div class="login-container">
     <h2>Đăng Nhập</h2>
-    <form>
+    <form method="post">
         <div class="mb-3">
-            <input type="email" class="form-control" id="email" placeholder="Email" required>
+            <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
         </div>
         <div class="mb-3">
-            <input type="password" class="form-control" id="password" placeholder="Mật khẩu" required>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Mật khẩu" required>
         </div>
         <div class="mb-3 text-center">
             <a href="#" class="text-link">Quên mật khẩu?</a>
@@ -81,3 +108,30 @@
         </div>
     </form>
 </div>
+<script>
+    // Thêm hàm showToast
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type} show`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300); // Xóa sau khi fade out
+        }, 3000); // Hiển thị 3 giây
+    }
+    // Hiển thị toast nếu có message
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <text>
+            showToast('Tài khoản không tồn tại! Vui lòng kiểm tra lại', 'toast-error');
+        </text>
+    }
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <text>
+            showToast('Đăng ký thành công! Vui lòng đăng nhập lại!', 'toast-success');
+        </text>
+    }
+</script>

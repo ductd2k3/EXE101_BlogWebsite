@@ -96,8 +96,8 @@
         }
 /* CSS hiện tại giữ nguyên, thêm style cho modal */
 .modal-content {
-    background: #1b263b;
-    color: #e0e1dd;
+    background: #ffffff; /* Đổi thành màu trắng để dễ quét QR */
+    color: #1b263b; /* Đổi màu chữ thành tối để tương phản với nền trắng */
     border-radius: 15px;
     border: none;
 }
@@ -113,17 +113,20 @@
 
 .modal-body {
     text-align: center;
+    background: #ffffff; /* Đảm bảo nền của body cũng là trắng */
 }
 
     .modal-body img {
         max-width: 200px;
         margin-bottom: 20px;
         border-radius: 10px;
+        background: #ffffff; /* Đảm bảo vùng quanh QR là trắng */
+        padding: 10px; /* Thêm padding để tạo khoảng trắng quanh QR */
     }
 
     .modal-body p {
         margin: 10px 0;
-        color: #e0e1dd;
+        color: #1b263b; /* Đổi màu chữ để tương phản với nền trắng */
     }
 
 .modal-footer {
@@ -132,5 +135,11 @@
 }
 
 .btn-close {
-    filter: invert(1); /* Đổi màu nút đóng thành trắng để nổi trên nền tối */
+    filter: invert(0); /* Đổi lại nút đóng thành màu đen để nổi trên nền trắng */
+}
+
+@media (max-width: 767px) {
+    .premium-card {
+        margin-bottom: 20px;
+    }
 }
