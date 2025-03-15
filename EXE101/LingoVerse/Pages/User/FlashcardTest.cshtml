@@ -1,0 +1,149 @@
+﻿@page
+@model FlashCardTestModel
+@{
+    ViewData["Title"] = "Flashcard Test";
+}
+
+<form>
+    <div class="row" style="margin-right:8%;margin-left:10%">
+        <div class="container mt-5">
+            <div class="progress">
+                <div class="progress-bar progress-bar-learn progress-bar-striped progress-bar-animated bg-info"
+                     role="progressbar">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 0 100px 0 100px">
+        <div class="col-9">
+            <div class="m-5">
+                @{
+                    int i = 0; // Biến đếm thủ công vì Dictionary không có index
+                }
+                @foreach (var question in Model.FinalListTest)
+                {
+                    <div class="card shadow p-3 question @(i != 0 ? "d-none" : "")" id="question-@(i+1)" style="border-radius: 10px; border: 2px #cccccc solid">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title" style="font-style: italic; color:#939eb6; font-size: medium">Question @(i + 1)</h5>
+                                <h6 class="bg-secondary text-white d-flex align-items-center"
+                                    style="border-radius: 10px;margin-right: 30px;font-size: small; padding: 0 10px 0 10px">
+                                    Term
+                                </h6>
+                            </div>
+                            <p class="card-text">@question.Key</p>
+                            <div class="row w-100">
+                                @for (int j = 0; j < question.Value.Count; j++)
+                                {
+                                    var term = question.Value[j];
+                                    <div class="col-6 mt-4 @(term.IsCorrect ? "card-correct" : "card-incorrect")">
+                                        <button type="button"
+                                                style="height: 130px;width:100%; border: 1px grey solid; font-weight: 600; font-size: small; border-radius: 10px"
+                                                data-question-id="@(i + 1)"
+                                                class="btn btn-block buttonAnswer question-@(i+1)__answer"
+                                                id="question-@(i+1)__answer-@(j+1)">
+                                            @if (term.Type == "Definition")
+                                            {
+                                                @term.Term.Definition
+                                            }
+                                            else
+                                            {
+                                                @term.Term.TermName
+                                            }
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    i++; // Tăng biến đếm thủ công
+                }
+
+            </div>
+        </div>
+        <div class="col-3" style="font-size: small">
+            <div class="mt-5">
+                <partial name="AnswerSheet" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="resultToSend" method="POST" asp-page="ResultTest">
+    <input type="hidden" id="answers" name="answers" value="" />
+    <input type="hidden" name="setId" value="@Model.SetId" />
+</form>
+
+    <style>
+        .buttonAnswer:focus {
+            border: 2px blue solid;
+            background-color: #e8e8fc;
+        }
+
+        .styleSelectAnswer {
+            border: 2px blue solid !important;
+            background-color: #e8e8fc;
+        }
+
+        .bgAndText-selected {
+            background-color: #17a2b8 !important;
+            color: white;
+        }
+    </style>
+
+    <script>
+        // Click answer
+        const answers = document.querySelectorAll(".buttonAnswer");
+        answers.forEach((answer) => {
+            answer.addEventListener(('click'), () => {
+                // Get all answers that have the same parent as this answer
+                var questionId = answer.dataset.questionId;
+                const answersOfThisQuestionId = document.querySelectorAll(".question-" + questionId + "__answer");
+                // Remove style of other answers
+                answersOfThisQuestionId.forEach((answer) => {
+                    answer.classList.remove("styleSelectAnswer");
+                });
+                answer.classList.add("styleSelectAnswer");
+                var id = answer.id;
+                var number = id.split("__answer-")[0].split("-")[1];
+
+                // Get number sheet follow by id
+                const numberSheet = document.getElementById(number);
+                numberSheet.classList.add("bgAndText-selected");
+            });
+        });
+
+        // Number in sheet answer event
+        const numberSheets = document.querySelectorAll(".numberSheet");
+        numberSheets.forEach((numberSheet) => {
+            numberSheet.addEventListener(('click'), () => {
+                var id = numberSheet.id;
+                const allQuestion = document.querySelectorAll(".question");
+                allQuestion.forEach((question) => {
+                    question.classList.add("d-none");
+                });
+                // Get question element follow by ID
+                const questionFollowById = document.getElementById("question-" + id);
+                questionFollowById.classList.remove("d-none");
+
+                // Question detail
+                var questionDetail = document.querySelector(".question-detail");
+                questionDetail.innerText = "Question " + id + " (" + (10 / @Model.FinalListTest.Count).toFixed(2) + " points)";
+            });
+        });
+
+        // Submit result
+        function submitData() {
+            var answers = document.querySelectorAll(".styleSelectAnswer");
+            var data = [];
+            answers.forEach((answer) => {
+                data.push(answer.id);
+            });
+
+            document.getElementById("answers").value = data.join(",");
+            document.getElementById("resultToSend").submit();
+        }
+
+
+    </script>

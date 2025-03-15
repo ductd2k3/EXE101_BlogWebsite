@@ -1,0 +1,310 @@
+﻿@page
+@{
+    ViewData["Title"] = "Flashcards";
+
+    // Dummy data for demonstration
+    var setName = "Sample Set";
+    var term = new Term { TermName = "Term A", Definition = "Definition of Term A" };
+    var current = 0;
+    var size = 10;
+    var userCreatedSet = new User { FullName = "John Doe", ThumbnailUrl = "/krs/assets/images/imageUser/default.jpg" };
+    var isUserOwnSet = false;
+    var isLearning = false;
+    var setId = 1;
+}
+
+<!--Navbar section-->
+<!--Banner section-->
+<div class="container">
+    <h2 class="mt-4 font-weight-bold " style="color: white">@setName</h2>
+    <div class="row">
+        <div class="col-9 mt-3">
+            <div class="row">
+                <div class="col-3">
+                    <a type="button" href="#" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center" style="background: #1b263b; color:white">
+                        <img src="~/flashcard/flashcard.png" width="25px" style="margin-right: 15px" />
+                        <span>Flashcards</span>
+                    </a>
+                </div>
+                <div class="col-3">
+                    @* @if (Context.Session.GetString("User") != null) *@
+                    @* { *@
+                    <a type="button" asp-page="/User/FlashcardLearn" asp-page-handler="DisplayLearn" asp-route-setId="@setId" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center" style="background: #1b263b; color:white">
+                        <img src="~/flashcard/learn.png" width="25px" style="margin-right: 15px" />
+                        <span>Learn</span>
+                    </a>
+                    @* } *@
+                    @* else *@ 
+                    @* @* { *@
+                    @*     <a type="button" asp-page="/User" asp-page-handler="Login" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center"> *@
+                    @*         <img src="/krs/assets/images/homepage/learn.png" width="25px" style="margin-right: 15px" /> *@
+                    @*         <span>Learn</span> *@
+                    @*     </a> *@
+                    @* @* } *@
+                </div>
+                <div class="col-3">
+                    @* @if (Context.Session.GetString("User") != null) *@
+                    @* { *@
+                    <a asp-page="/User/FlashcardTest" asp-page-handler="DisplayTest" asp-route-setId="@setId" type="button" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center" style="background: #1b263b; color:white">
+                        <img src="~/flashcard/test.png" width="25px" style="margin-right: 15px" />
+                        <span>Test</span>
+                    </a>
+                    @* } *@
+                    @* else *@
+                    @* @* { *@ 
+                    @*     <a asp-page="/User" asp-page-handler="Login" type="button" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center"> *@
+                    @*         <img src="/krs/assets/images/homepage/test.png" width="25px" style="margin-right: 15px" /> *@
+                    @*         <span>Test</span> *@
+                    @*     </a> *@
+                    @* @* } *@
+                </div>
+                <div class="col-3">
+                    @* @if (Context.Session.GetString("User") != null) *@
+                    @* { *@
+                    <a asp-page="/User/FlashcardMatch" asp-page-handler="DisplayMatch" asp-route-setId="@setId" type="button" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center" style="background: #1b263b; color:white">
+                        <img src="~/flashcard/match.png" width="25px" style=" margin-right: 15px" />
+                        <span>Match</span>
+                    </a>
+                    @* } *@
+                    @* else *@ 
+                    @* @* { *@
+                    @*     <a asp-page="/User" asp-page-handler="Login" type="button" class="nav-button--flash d-flex btn-lg border-0 shadow font-weight-normal w-100 h-100 justify-content-start align-items-center"> *@
+                    @*         <img src="/krs/assets/images/homepage/match.png" width="25px" style="margin-right: 15px" /> *@
+                    @*         <span>Match</span> *@
+                    @*     </a> *@
+                    @* @* } *@
+                </div>
+            </div>
+            <div class="carousel-container">
+                <div class="row mt-3 flashcard">
+                    <!-- Generate cards -->
+                    <div class="flashcard-inner col-12 " onclick="flipCard()">
+                        <!-- Flashcard front -->
+                        <div class="flashcard-front shadow d-flex justify-content-center align-items-center" style="height: 450px; background: #1b263b; color:white">
+                            Hello
+                        </div>
+                        <!-- Flashcard back -->
+                        <div class="flashcard-back shadow d-flex justify-content-center align-items-center" style="height: 450px;background: #1b263b; color:white">
+                            Xin chào
+                        </div>
+                    </div>
+                    <div class="col-12 mb-5 mt-1" style="margin: 0 15px;">
+                        <div class="carousel-nav-container">
+                            <div class="carousel-nav d-flex justify-content-center">
+                                <a onclick="prevCard()" id="back" class="carousel-button-back carousel-button d-flex justify-content-center align-items-center">
+                                    <img src="~/flashcard/left-arrow.png" width="25px">
+                                </a>
+                                <div class="d-flex align-items-center pl-4 pr-4">
+                                    <span id="carousel-order" style="font-size:large; color:white">@(current + 1)/@size</span>
+                                </div>
+                                <a onclick="nextCard()" id="next" class="carousel-button-next carousel-button d-flex justify-content-center align-items-center">
+                                    <img src="~/flashcard/right-arrow.png" width="25px">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 mt-3">
+            <div class="row">
+                <div class="col-12" style="height: 67px"></div>
+            </div>
+            <div class="card shadow" style="background: #1b263b; color:white">
+                <div class="card-body d-flex justify-content-start" >
+                    @if (userCreatedSet?.ThumbnailUrl != null)
+                    {
+                        <img src="~/UserImage/avartar.png" alt="User"
+                             class="avatar rounded-circle p-2 " style="height: 55px; width:55px">
+                    }
+                    else
+                    {
+                        <img src="~/UserImage/avartar.png" alt="User"
+                             class="avatar rounded-circle p-2 " style="height: 55px; width:55px">
+                    }
+
+                    <div class="ml-2">
+                        <p class="card-text mb-0" style="font-size: small">Set created by</p>
+                        <p class="card-text mt-1">@userCreatedSet?.FullName</p>
+                    </div>
+                </div>
+                <!--Set cua user thi hien edit va delete-->
+                @* @if (isUserOwnSet) *@
+                @* { *@
+                <div class="d-flex justify-content-around mb-3">
+                    <a asp-page="/StudySet" asp-page-handler="UpdateStudySet" asp-route-setId="@setId" asp-route-number="@size" class="custom-button " style="font-size: small; width: 100px">
+                        <i class="fa fa-pencil-alt mr-2"></i>
+                        Edit
+                    </a>
+                    <a asp-page="/StudySet" asp-page-handler="DeleteMyCreateSet" asp-route-setId="@setId" class="custom-button" style="font-size: small; width: 100px">
+                        <i class="fa fa-trash-alt mr-2"></i>
+                        Delete
+                    </a>
+                </div>
+                @* } *@
+                <!--Set khong phai cua user va chua hoc thi hien add to learn-->
+
+                @* <div class="d-flex justify-content-around mb-3"> *@
+                @*     <form method="post" asp-page="/Flashcard" asp-page-handler="AddSetToLearning"> *@
+                @*         <input type="hidden" name="SetId" value="@setId" /> *@
+                @*         <input type="hidden" name="Current" value="@current" /> *@
+                @*         <button type="submit" class="custom-button " style="font-size: small;"> *@
+                @*             <i class="fa fa-plus-circle mr-2"></i> *@
+                @*             Add set to learn *@
+                @*         </button> *@
+                @*     </form> *@
+                @* </div> *@
+
+                <!--Set khong phai cua user va dang hoc thi hien remove to learn-->
+
+                @* <div class="d-flex justify-content-around mb-3"> *@
+                @*     <form method="post" asp-page="/StudySet" asp-page-handler="DeleteMyLearningSet"> *@
+                @*         <input type="hidden" name="SetId" value="@setId" /> *@
+                @*         <button type="submit" class="custom-button" style="font-size: small;"> *@
+                @*             <i class="fa-solid fa fa-minus-circle mr-2"></i> *@
+                @*             Remove from my study set *@
+                @*         </button> *@
+                @*     </form> *@
+                @* </div> *@
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /*Edit button*/
+    .custom-button {
+        display: flex;
+        align-items: center;
+        padding: 5px 25px;
+        font-size: 16px;
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #000;
+        border-radius: 15px; /* This gives the button a hand-drawn effect */
+        box-shadow: 1.5px 1.5px #000;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+    }
+
+        .custom-button:hover {
+            text-decoration: none;
+        }
+
+    body {
+        background-color: #f6f7fb;
+    }
+
+    .nav-button--flash {
+        font-size: large;
+        background-color: #ffffff;
+        padding: 12px;
+        text-decoration: none !important;
+        color: black;
+    }
+
+    .flashcard {
+        perspective: 1000px;
+        position: relative;
+        width: 100%;
+    }
+
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 450px;
+        transform-origin: center;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+    }
+
+    .flashcard-inner__selected {
+        display: block;
+    }
+
+    .flashcard-inner.flipped { 
+        transform: rotateX(180deg);
+    }
+
+    .flashcard-front,
+    .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transform-origin: center;
+    }
+
+    .flashcard-back {
+        transform: rotateX(180deg);
+        transform-origin: center;
+    }
+
+    .flip {
+        transform: rotateX(180deg);
+        transform-origin: center;
+    }
+
+    .carousel-button {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 1px solid #858485;
+        cursor: pointer;
+    }
+</style>
+<script>
+    const flashcards = [
+        { front: "Hello", back: "Xin chào" },
+        { front: "Goodbye", back: "Tạm biệt" },
+        { front: "Thank you", back: "Cảm ơn" }
+    ];
+    let currentIndex = 0;
+
+    function flipCard() {
+        const card = document.querySelector('.flashcard-inner');
+        card.classList.toggle('flipped');
+    }
+
+     function updateCard() {
+        const cardFront = document.querySelector('.flashcard-front');
+        const cardBack = document.querySelector('.flashcard-back');
+        cardFront.textContent = flashcards[currentIndex].front;
+        cardBack.textContent = flashcards[currentIndex].back;
+        document.querySelector('.flashcard-inner').classList.remove('flipped');
+    }
+
+    function prevCard() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCard();
+        }
+    }
+
+    function nextCard() {
+        if (currentIndex < flashcards.length - 1) {
+            currentIndex++;
+            updateCard();
+        }
+    }
+    updateCard();
+</script>
+
+
+@functions {
+
+    // Dummy Term and User classes
+    public class Term
+    {
+        public string TermName { get; set; }
+        public string Definition { get; set; }
+    }
+
+    public class User
+    {
+        public string FullName { get; set; }
+        public string ThumbnailUrl { get; set; }
+    }
+}

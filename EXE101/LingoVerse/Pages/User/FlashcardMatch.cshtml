@@ -1,0 +1,367 @@
+﻿@page
+@model LingoVerse.Pages.User.FlashcardMatchModel
+@{
+    ViewData["Title"] = "Matching Game";
+}
+
+<div>
+    @if (Model.Type == "Line" || Model.Type == null)
+    {
+        <div class="container1">
+            <div class="column" id="left-column">
+                @for (int i = 0; i < Model.LeftColumnItems.Count;i++)
+                {
+                    <div class="term" id="term@(i+1)" onclick="selectTerm('term@(i+1)')" style="height:100px">@Model.LeftColumnItems[i]</div>
+                }
+            </div>
+            <div class="column" id="right-column">
+                @for (int i = 0; i < Model.RightColumnItems.Count;i++)
+                {
+                    <div class="card answer" id="answer@(i+1)" data-term="term@(i + 1)" onclick="selectAnswer('term@(i+1)', this)" style="height:100px">@Model.RightColumnItems[i]</div>
+                }
+            </div>
+        </div>
+        <svg id="svg"></svg>
+    }
+</div>
+
+@if (Model.Type == "Line" || Model.Type == null)
+{
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container1 {
+            display: flex;
+            justify-content: space-around;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .term, .answer {
+            width: 400px;
+            text-align: center;
+            margin: 10px;
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            align-content: center;
+            font-size: 14px;
+            color: #ffffff;
+            background-color: #349eb3;
+            transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
+            padding: 0 18px;
+        }        
+
+        .term:hover, .answer:hover {
+            color: #ffffff;
+            background-color: #006570;
+        }
+
+        .term.selected {
+            background-color: #02424e;
+        }
+        
+        .answer.correct {
+            background-color: #28a745; /* light green */
+        }
+
+        .answer.incorrect {
+            background-color: #f08080; /* light red */
+        }
+
+        #svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        body {
+            font-family: "Montserrat", sans-serif;
+            font-style: normal;
+            font-weight: 600;
+        }
+    </style>
+
+    <script>
+        let selectedTerm = null;
+        const correctPairs = [];
+        
+        function selectTerm(termId) {
+            if (selectedTerm) {
+                document.getElementById(selectedTerm).classList.remove('selected');
+            }
+            selectedTerm = termId;
+            document.getElementById(termId).classList.add('selected');
+        }
+
+        function selectAnswer(expectedTermId, answerElement) {
+            if (selectedTerm) {
+                if (selectedTerm === expectedTermId) {
+                    answerElement.classList.add('correct');
+                    correctPairs.push({termId: selectedTerm, answerId: answerElement.id});
+                    drawLines();
+                    checkAllMatched();
+                } else {
+                    answerElement.classList.add('incorrect');
+                    setTimeout(() => {
+                        answerElement.classList.remove('incorrect');
+                    }, 1000);
+                }
+                document.getElementById(selectedTerm).classList.remove('selected');
+                selectedTerm = null;
+            }
+        }
+
+        function drawLines() {
+            const svg = document.getElementById('svg');
+            svg.innerHTML = '';
+            correctPairs.forEach(pair => {
+                const termElement = document.getElementById(pair.termId);
+                const answerElement = document.getElementById(pair.answerId);
+                const termRect = termElement.getBoundingClientRect();
+                const answerRect = answerElement.getBoundingClientRect();
+                const startX = termRect.right + window.scrollX;
+                const startY = termRect.top + termRect.height / 2 + window.scrollY;
+                const endX = answerRect.left + window.scrollX;
+                const endY = answerRect.top + answerRect.height / 2 + window.scrollY;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startX);
+                line.setAttribute('y1', startY);
+                line.setAttribute('x2', endX);
+                line.setAttribute('y2', endY);
+                line.setAttribute('stroke', 'green');
+                line.setAttribute('stroke-width', '2');
+                svg.appendChild(line);
+            });
+        }
+
+        function checkAllMatched() {
+            const terms = document.querySelectorAll('.term');
+            if (correctPairs.length === terms.length) {
+                document.querySelector(".result").classList.remove("d-none");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            shuffleDivs('right-column');
+        });
+
+        function shuffleDivs(containerId) {
+            const container = document.getElementById(containerId);
+            const items = Array.from(container.children);
+            items.sort(() => Math.random() - 0.5);
+            items.forEach(item => container.appendChild(item));
+        }
+    </script>
+}
+@if (Model.Type == "Tiles")
+{
+    <style>
+        .container1 {
+            display: grid;
+            grid-template-columns: repeat(@Model.Column, 1fr);
+            gap: 10px;
+            width: auto;
+            margin: 50px auto;
+        }
+        
+        .card {
+            border: 1px solid #000;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            color: #ffffff;
+            background-color: #02424e;
+            widows: auto;
+            height: @Model.Height;
+            align-content: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: @Model.FontSize px;
+        }
+        
+        .correct {
+            background-color: #0cc336; /* light green */
+            pointer-events: none;
+        }
+        
+        .wrong {
+            background-color: lightcoral;
+        }
+        
+        .hidden {
+            background-color: #349eb3;
+        }
+    </style>
+
+    <div class="container1" id="right-column">
+        @for (int i = 0; i < Model.RightColumnItems.Count; i++)
+        {
+            <div class="card hidden" data-term="term@(i + 1)">@Model.RightColumnItems[i]</div>
+            <div class="card hidden" data-term="term@(i + 1)">@Model.RightColumnItems[i]</div>
+        }
+    </div>
+
+    <script>
+        let firstCard, secondCard;
+        let lockBoard = false;
+        const cards = document.querySelectorAll('.card');
+        
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (lockBoard) return;
+                if (card === firstCard) return;
+                card.classList.add('flipped');
+        if (!firstCard) {
+        firstCard = card;
+        } else {
+        secondCard = card;
+        lockBoard = true;
+        checkMatch();
+        }
+        });
+        });
+        function checkMatch() {
+        const isMatch = firstCard.dataset.term === secondCard.dataset.term;
+        if (isMatch) {
+        firstCard.classList.add('correct');
+        secondCard.classList.add('correct');
+        resetBoard();
+        } else {
+        firstCard.classList.add('wrong');
+        secondCard.classList.add('wrong');
+        setTimeout(() => {
+        firstCard.classList.remove('flipped', 'wrong');
+        secondCard.classList.remove('flipped', 'wrong');
+        resetBoard();
+        }, 1000);
+        }
+        }
+
+        function resetBoard() {
+        [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+    </script>
+}
+
+        <div class="result correct-result d-none">
+    <div class="d-flex align-content-center h-100 justify-content-around" style="flex-wrap: wrap">
+        <div>
+            <img src="~/flashcard/check.png" width="50px" height="50px" style="margin-right: 12px"/>
+            <span style="font-weight: 600">YOU'RE DOING GREAT, KEEP GOING!</span>
+        </div>
+        @* <c:choose> *@
+        @*     <c:when test="${remaining>1}"> *@
+        @*         <a class="continue-button__green continue-button" href="">CONTINUE</a> *@
+        @*     </c:when> *@
+        @*     <c:otherwise> *@
+                <a class="continue-button__green continue-button done-button" href="#">CONTINUE</a>
+        @*     </c:otherwise> *@
+        @* </c:choose> *@
+    </div>
+</div>  
+<style>
+    .correct-result{
+        background-color: #d7ffb8;
+        color: #58a700;
+    }
+    .result{
+        height:120px;
+        position: fixed;
+        bottom:0;
+        width: 100vw;
+    }
+    .continue-button__green{
+        background-color: #58cc02!important;
+        box-shadow: 0px 9px 0px #1a9104, 0px 9px 25px #00000073!important;
+    }
+    .continue-button {
+        height: fit-content;
+        position: relative;
+        color: rgba(255, 255, 255, 1);
+        text-decoration: none;
+        background-color: rgba(219, 87, 5, 1);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 0.9em;
+        display: block;
+        padding: 9px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        text-decoration: none;
+        border-radius: 8px;
+        -webkit-box-shadow: 0px 9px 0px rgba(219, 31, 5, 1), 0px 9px 25px rgba(0, 0, 0, .7);
+        -moz-box-shadow: 0px 9px 0px rgba(219, 31, 5, 1), 0px 9px 25px rgba(0, 0, 0, .7);
+        box-shadow: 0px 9px 0px rgba(219, 31, 5, 1), 0px 9px 25px rgba(0, 0, 0, .7);
+        width: 160px;
+        text-align: center;
+        -webkit-transition: all .1s ease;
+        -moz-transition: all .1s ease;
+        -ms-transition: all .1s ease;
+        -o-transition: all .1s ease;
+        transition: all .1s ease;
+    }
+    .continue-button:active {
+        -webkit-box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px rgba(0, 0, 0, .9);
+        -moz-box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px rgba(0, 0, 0, .9);
+        box-shadow: 0px 3px 0px rgba(219, 31, 5, 1), 0px 3px 6px rgba(0, 0, 0, .9);
+        position: relative;
+        top: 6px;
+    }
+</style>
+<script>
+    function shuffleDivs(containerId) {
+    const container = document.getElementById(containerId);
+    const items = Array.from(container.children);
+    items.sort(() => Math.random() - 0.5);
+    items.forEach(item => container.appendChild(item));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+    shuffleDivs('right-column');
+    });
+    //Check if dont every 1000
+
+    function checkChildDivs() {
+    var parentDiv = document.getElementById('right-column');
+    var childDivs = parentDiv.querySelectorAll('.card');
+    let allHaveClass = true;
+    for (let i = 0; i < childDivs.length; i++) {
+    if (!childDivs[i].classList.contains('correct')) {
+    console.log(childDivs[i].classList);
+    allHaveClass = false;
+    break;
+    }
+    }
+
+    if (allHaveClass) {
+    clearInterval(intervalId);
+    var next = document.querySelector(".result");
+    next.classList.remove("d-none");
+    }
+    }
+
+    var intervalId = setInterval(checkChildDivs, 1000);
+    const continueButton = document.querySelector(".continue-button__green");
+    continueButton.addEventListener('click', () => {
+    document.getElementById("formMatch").submit();
+    });
+
+
+</script>

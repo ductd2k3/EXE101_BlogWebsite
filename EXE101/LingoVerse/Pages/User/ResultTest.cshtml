@@ -1,0 +1,238 @@
+﻿@page
+@model ResultTestModel
+@{
+}
+
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+    <script src="https://cdn.canvasjs.com/ga/jquery.canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [@Model.NumberOfCorrect, @(Model.FinalListTest.Count - Model.NumberOfCorrect)],
+                        backgroundColor: ['#4CAF50', '#F44336'],
+                        hoverBackgroundColor: ['#4CAF50', '#F44336'],
+                    }]
+                },
+                options: {
+                    cutout: '80%',
+                    rotation: -0.5 * Math.PI,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+    <style>
+        .disabled-custom {
+            opacity: 0.4;
+        }
+        .correct-choice {
+            background-color: #b2f2bb;
+        }
+        .incorrect-choice {
+            background-color: #ffc9c9
+        }
+        .chart-container {
+            position: relative;
+            height: 150px;
+            width: 150px;
+            margin: 0 auto;
+        }
+        .summary {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .next-step {
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        #myChart {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        .chart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25px;
+            color: #666;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .search-container select,
+        .search-container input {
+            border: none;
+            outline: none;
+            height: 100%;
+        }
+        .search-container select {
+            flex-shrink: 0;
+            width: auto;
+            padding: 5px;
+        }
+        .search-container input {
+            flex-grow: 1;
+            padding: 5px;
+        }
+        .search-container button {
+            border: none;
+            background: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center p-5">
+                    <h4>
+                        <img src="~/flashcard/congratulation.png" width="30px" style="margin-bottom:2px" />
+                        Congratulations!! You have done the test
+                    </h4>
+                    <h2>Score: @string.Format("{0:F1}", Model.NumberOfCorrect * 10.0 / Model.FinalListTest.Count)</h2>
+                    <div class="container mt-5">
+                        <div class="container mt-5">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-6 text-center d-flex">
+                                    <div class="chart-container justify-content-center align-content-center align-items-center">
+                                        <div class="chart-text">@string.Format("{0:F1}", Model.NumberOfCorrect * 100.0 / Model.FinalListTest.Count)%</div>
+                                        <canvas id="myChart"></canvas>
+                                        <div class="summary mt-3">
+                                            <h6>Your time: <strong>1 min</strong></h6>
+                                            <div class=" justify-content-around text-white d-flex" style="font-weight:300!important">
+                                                <div style="margin-right: 10px" class="badge bg-success">Correct: @Model.NumberOfCorrect</div>
+                                                <div class="badge bg-danger">Incorrect: @(Model.FinalListTest.Count - Model.NumberOfCorrect)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row next-step align-items-center">
+                                        <div class="col-3">
+                                            <a href="@Url.Action("DisplayLearn", "Learn", new { setId = Model.SetId })" type="button" class="pl-3" style="font-size: medium; background-color: #ffffff;">
+                                                <img src="~/flashcard/learn.png" width="50px" height="50px" style="margin-right: 15px" />
+                                            </a>
+                                        </div>
+                                        <div class="col-9 text-left">
+                                            <h6 style="font-size:small; font-weight: 500" class="badge bg-warning">4 missed terms</h6>
+                                            <p style="font-size: 14px; margin-bottom: 5px"><a href="#">Practice terms in Learn</a></p>
+                                            <p style="font-size: 14px; margin-bottom: 5px">Practice your missed terms more until you get them right.</p>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex next-step align-items-center">
+                                        <div class="col-3">
+                                            <a href="@Url.Action("DisplayTest", "Test", new { setId = Model.SetId })" type="button" class="pl-3" style="font-size: medium; background-color: #ffffff;">
+                                                <img src="~/flashcard/test.png" width="50px" height="50px" style="margin-right: 15px" />
+                                            </a>
+                                        </div>
+                                        <div class="col-9 text-left">
+                                            <p class="card-text" style="font-size: 14px"><a href="#">Try another test to boost your confidence.</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* <div class="row mt-3"> *@
+    @*     <form class="col-12" method="post" asp-page-handler="Search"> *@
+    @*         <div class="search-container"> *@
+    @*             <select name="searchSelect" class="form-control" style="border-right: 1px solid #ccc"> *@
+    @*                 <option selected="@(Model.SearchSelect == "question" || Model.SearchSelect == null)" value="question">Question</option> *@
+    @*                 <option selected="@(Model.SearchSelect == "answer")" value="answer">Answer</option> *@
+    @*                 <option selected="@(Model.SearchSelect == "both")" value="both">Both</option> *@
+    @*             </select> *@
+    @*             <input type="text" name="searchBox" class="form-control" placeholder="Search..." value="@Model.SearchBox"> *@
+    @*             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" style="border-left: 1px solid #ccc"> *@
+    @*                 <img src="~/flashcard/loupe.png" height="22" alt="search"> *@
+    @*             </button> *@
+    @*             <input type="hidden" id="answers" name="answers" value="@Model.Answers" /> *@
+    @*             <input type="hidden" name="setId" value="@Model.SetId" /> *@
+    @*         </div> *@
+    @*     </form> *@
+    @* </div> *@
+    <div class="row">
+        <div class="col-12">
+            <div class="">
+                @for (int i = 0; i < Model.FinalListTest.Count; i++)
+                {
+                    var question = Model.FinalListTest.ElementAt(i);
+                    var questionKey = question.Key;
+                    var termOptions = question.Value;
+
+                    <div class="card shadow p-3 question mt-3" id="question-@(i+1)" style="border-radius: 10px; border: 2px #cccccc solid">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title text-muted" style="font-style: italic; font-size: medium">
+                                    Question @(i + 1)
+                                </h5>
+                                @if (termOptions.Any())
+                                {
+                                    <h6 class="bg-secondary text-white d-flex align-items-center px-3 py-1 rounded" style="margin-right: 30px; font-size: small;">
+                                        @termOptions[0].Type
+                                    </h6>
+                                }
+                            </div>
+                            <p class="card-text mb-0">@questionKey</p>
+                            <div class="row w-100">
+                                @for (int j = 0; j < termOptions.Count; j++)
+                                {
+                                    var term = termOptions[j];
+                                    var isCorrect = term.IsCorrect;
+                                    var isUserChoose = term.IsUserChoose;
+
+                                    // Xây dựng class động
+                                    var buttonClasses = string.Join(" ", new List<string>
+                            {
+                            "btn btn-block buttonAnswer",
+                            $"question-{i+1}__answer",
+                            isCorrect ? "correct-choice card-correct" : "card-incorrect",
+                            !isCorrect && !isUserChoose ? "disabled-custom" : "",
+                            !isCorrect && isUserChoose ? "incorrect-choice" : ""
+                            }.Where(c => !string.IsNullOrWhiteSpace(c))); // Loại bỏ class trống
+
+                                    <div class="col-6 mt-4">
+                                        <button type="button"
+                                                id="question-@(i+1)__answer-@(j+1)"
+                                                data-question-id="@(i + 1)"
+                                                class="@buttonClasses"
+                                                style="height: 100px;width:100%; border: 1px grey solid; font-weight: 600; font-size: small; border-radius: 10px">
+                                            @(term.Type == "Definition" ? term.Term.Definition : term.Term.TermName)
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

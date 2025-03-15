@@ -11,7 +11,6 @@ namespace LingoVerse
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
             //Add database
             builder.Services.AddDbContext<LinguaVerseContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
