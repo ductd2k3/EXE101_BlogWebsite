@@ -1,6 +1,8 @@
 ﻿@page
 @model LingoVerse.Pages.User.RegisterModel
 @{
+    string errorMessage = TempData["ErrorMessage"] as string;
+    string successMessage = TempData["SuccessMessage"] as string;
 }
 <style>
     .login-container {
@@ -10,75 +12,122 @@
         box-shadow: 0 10px 20px rgba(119, 141, 169, 0.5);
         max-width: 400px;
         width: 100%;
-        margin: auto; /* Đặt giữa trang */
+        margin: 40px auto;
     }
 
-    .login-container {
-        margin-top: 40px;
+    .login-container h2 {
+        color: #00b4d8;
+        text-align: center;
+        margin-bottom: 30px;
     }
 
-        .login-container h2 {
-            color: #00b4d8;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    .form-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
 
-        .login-container .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #e0e1dd;
-            border-radius: 25px;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-        }
+    .login-container .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #e0e1dd;
+        border-radius: 25px;
+        padding: 10px 20px;
+        width: 100%;
+    }
 
-            .login-container .form-control::placeholder {
-                color: #778da9;
-            }
+    .login-container .form-control::placeholder {
+        color: #778da9;
+    }
 
-        .login-container .btn {
-            background: #00b4d8;
-            border: none;
-            border-radius: 25px;
-            padding: 10px;
-            width: 100%;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
+    .login-container .btn {
+        background: #00b4d8;
+        border: none;
+        border-radius: 25px;
+        padding: 10px;
+        width: 100%;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
 
-            .login-container .btn:hover {
-                background: #4361ee;
-            }
+    .login-container .btn:hover {
+        background: #4361ee;
+    }
 
-        .login-container .text-link {
-            color: #e0e1dd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+    .login-container .text-link {
+        color: #e0e1dd;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
 
-            .login-container .text-link:hover {
-                color: #00b4d8;
-            }
+    .login-container .text-link:hover {
+        color: #00b4d8;
+    }
 
     p {
         color: #e0e1dd;
     }
+
+    .error-message {
+        color: #ff4d4d;
+        font-size: 12px;
+        position: absolute;
+        bottom: -20px;
+        left: 20px;
+        display: none;
+    }
+
+    .error .form-control {
+        border: 1px solid #ff4d4d;
+    }
+
+    .error .error-message {
+        display: block;
+    }
+    /* Giữ nguyên style cũ, thêm style cho toast */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        border-radius: 25px;
+        color: white;
+        font-size: 14px;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+    .toast-error {
+        background: #ff4d4d;
+    }
+
+    .toast-success {
+        background: #00b4d8;
+    }
 </style>
-<!-- Login Form -->
+
 <div class="login-container">
     <h2>Đăng Ký</h2>
-    <form>
-        <div class="mb-3">
-            <input type="text" class="form-control" id="username" placeholder="Tên tài khoản" required>
+    <form id="registerForm" method="post" onsubmit="return validateForm(event)">
+        <div class="form-group">
+            <input type="text" class="form-control" name="userName" id="username" placeholder="Tên tài khoản" required>
+            <span class="error-message" id="username-error">Vui lòng nhập tên tài khoản</span>
         </div>
-        <div class="mb-3">
-            <input type="email" class="form-control" id="email" placeholder="Email" required>
+        <div class="form-group">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+            <span class="error-message" id="email-error">Email không hợp lệ</span>
         </div>
-        <div class="mb-3">
-            <input type="password" class="form-control" id="password" placeholder="Mật khẩu" required>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Mật khẩu" required>
+            <span class="error-message" id="password-error">Mật khẩu phải dài ít nhất 6 ký tự</span>
         </div>
-        <div class="mb-3">
+        <div class="form-group">
             <input type="password" class="form-control" id="re-password" placeholder="Nhập lại mật khẩu" required>
+            <span class="error-message" id="repassword-error">Mật khẩu không khớp</span>
         </div>
         <div class="mb-3 text-center">
             <a href="#" class="text-link">Quên mật khẩu?</a>
@@ -89,3 +138,78 @@
         </div>
     </form>
 </div>
+
+<script>
+    // Thêm hàm showToast
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type} show`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300); // Xóa sau khi fade out
+        }, 3000); // Hiển thị 3 giây
+    }
+
+    // Hiển thị toast nếu có message
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <text>
+            showToast('Tài khoản đã tồn tại!', 'toast-error');
+        </text>
+    }
+
+
+    function validateForm(event) {
+        event.preventDefault();
+        let isValid = true;
+
+        // Reset all error states
+        document.querySelectorAll('.form-group').forEach(group => {
+            group.classList.remove('error');
+        });
+
+        // Username validation
+        const username = document.getElementById('username');
+        if (!username.value.trim()) {
+            showError(username, 'username-error');
+            isValid = false;
+        }
+
+        // Password validation
+        const password = document.getElementById('password');
+        if (password.value.length < 6) {
+            showError(password, 'password-error');
+            isValid = false;
+        }
+
+        // Re-password validation
+        const repassword = document.getElementById('re-password');
+        if (repassword.value !== password.value || !repassword.value) {
+            showError(repassword, 'repassword-error');
+            isValid = false;
+        }
+
+        if (isValid) {
+            document.getElementById('registerForm').submit();
+        }
+
+        return isValid;
+    }
+
+    function showError(input, errorId) {
+        const formGroup = input.closest('.form-group');
+        formGroup.classList.add('error');
+    }
+
+    // Real-time validation
+    ['username', 'password', 're-password'].forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', function() {
+            const formGroup = this.closest('.form-group');
+            formGroup.classList.remove('error');
+        });
+    });
+</script>

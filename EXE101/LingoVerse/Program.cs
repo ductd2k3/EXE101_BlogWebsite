@@ -1,4 +1,8 @@
 using LingoVerse.Models;
+using LingoVerse.Repositories.Implementation;
+using LingoVerse.Repositories.Interface;
+using LingoVerse.Services.Implementation;
+using LingoVerse.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace LingoVerse
@@ -9,12 +13,37 @@ namespace LingoVerse
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddHttpClient();
+            builder.Services.AddHttpContextAccessor();
             // Add services to the container.
             builder.Services.AddRazorPages();
 
             //Add database
             builder.Services.AddDbContext<LinguaVerseContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
+
+            // add Session
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddHttpContextAccessor();
+
+
+            // Add dependency injection
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+
+            builder.Services.AddScoped<IOfficialPostService, OfficialPostService>();
+            builder.Services.AddScoped<IOfficialPostsRepository, OfficialPostsRepository>();
+
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             var app = builder.Build();
 
@@ -34,6 +63,8 @@ namespace LingoVerse
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            app.UseSession();
 
             app.MapFallbackToPage("/User/Home");
 

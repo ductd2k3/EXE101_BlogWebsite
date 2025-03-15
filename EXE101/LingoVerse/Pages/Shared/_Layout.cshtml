@@ -34,7 +34,22 @@
                         <li class="nav-item"><a class="nav-link" href="/">Trang Chủ</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/FlashcardList">Thẻ ghi nhớ</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/Premium">Nâng cấp</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/User/Login">Đăng nhập</a></li>
+                        <li class="nav-item">
+                            @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+                            @{
+                                string userJson = HttpContextAccessor.HttpContext?.Session.GetString("UserSession");
+                            }
+                            @{
+                                if (string.IsNullOrEmpty(userJson))
+                                {
+                                    <a class="nav-link" href="/User/Login">Đăng nhập</a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link" href="/User/Logout">Đăng xuất</a>
+                                }
+                            }
+                        </li>
                     </ul>
                 </div>
             </nav>
