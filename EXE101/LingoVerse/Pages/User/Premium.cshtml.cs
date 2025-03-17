@@ -93,37 +93,25 @@ namespace LingoVerse.Pages.User
                         return new JsonResult(new { success = false, message = "Gói Premium không tồn tại" });
                     }
 
-                    // Kiểm tra subscription hiện tại
                     var existingSubscription = (await _userPremiumSubscriptionService.GetAllAsync())
                         .FirstOrDefault(s => s.UserId == user.UserId && s.IsActive && !s.IsDeleted);
 
                     if (existingSubscription != null)
                     {
                         // Gia hạn subscription hiện tại
-                        existingSubscription.EndDate = existingSubscription.EndDate.AddDays(plan.DurationDays); // Cộng thêm thời gian
+                        existingSubscription.EndDate = existingSubscription.EndDate.AddDays(plan.DurationDays);
                         await _userPremiumSubscriptionService.UpdateAsync(existingSubscription);
-
-                        // Gửi email xác nhận gia hạn
-                        var emailMessage = new EmailMessage
+                        return new JsonResult(new
                         {
-                            To = user.Email,
-                            Subject = "Xác nhận gia hạn gói Premium",
-                            Body = $@"
-                        Xin chào {user.Username},<br/><br/>
-                        Gói Premium '{plan.PlanName}' của bạn đã được gia hạn thành công!<br/>
-                        - Thời gian kết thúc mới: {existingSubscription.EndDate:dd/MM/yyyy}<br/><br/>
-                        Cảm ơn bạn đã tiếp tục tin tưởng LingoVerse!<br/>
-                        Trân trọng,<br/>
-                        Đội ngũ LingoVerse",
-                            IsHtml = true
-                        };
-                        await _emailService.SendEmailAsync(emailMessage);
-
-                        return new JsonResult(new { success = true, message = "Thanh toán thành công và đã gia hạn gói Premium" });
+                            success = true,
+                            message = "Thanh toán thành công và đã gia hạn gói Premium",
+                            isRenewal = true,
+                            planId = planId
+                        });
                     }
                     else
                     {
-                        // Tạo subscription mới nếu chưa có
+                        // Tạo subscription mới
                         var subscription = new UserPremiumSubscription
                         {
                             UserId = user.UserId,
@@ -133,27 +121,14 @@ namespace LingoVerse.Pages.User
                             IsActive = true,
                             IsDeleted = false
                         };
-
                         await _userPremiumSubscriptionService.AddAsync(subscription);
-
-                        // Gửi email xác nhận kích hoạt mới
-                        var emailMessage = new EmailMessage
+                        return new JsonResult(new
                         {
-                            To = user.Email,
-                            Subject = "Xác nhận kích hoạt gói Premium",
-                            Body = $@"
-                        Xin chào {user.Username},<br/><br/>
-                        Gói Premium '{plan.PlanName}' của bạn đã được kích hoạt thành công!<br/>
-                        - Thời gian bắt đầu: {subscription.StartDate:dd/MM/yyyy}<br/>
-                        - Thời gian kết thúc: {subscription.EndDate:dd/MM/yyyy}<br/><br/>
-                        Cảm ơn bạn đã tin tưởng LingoVerse!<br/>
-                        Trân trọng,<br/>
-                        Đội ngũ LingoVerse",
-                            IsHtml = true
-                        };
-                        await _emailService.SendEmailAsync(emailMessage);
-
-                        return new JsonResult(new { success = true, message = "Thanh toán thành công và đã kích hoạt gói Premium" });
+                            success = true,
+                            message = "Thanh toán thành công và đã kích hoạt gói Premium",
+                            isRenewal = false,
+                            planId = planId
+                        });
                     }
                 }
 
@@ -162,6 +137,130 @@ namespace LingoVerse.Pages.User
             catch (Exception ex)
             {
                 return new JsonResult(new { success = false, message = $"Lỗi server: {ex.Message}" });
+            }
+        }
+
+        public async Task<IActionResult> OnGetSendConfirmationEmail(int planId, bool isRenewal)
+        {
+            try
+            {
+                var userJson = _httpContextAccessor.HttpContext?.Session.GetString("UserSession");
+                if (string.IsNullOrEmpty(userJson))
+                {
+                    return new JsonResult(new { success = false, message = "Người dùng chưa đăng nhập" });
+                }
+
+                var user = JsonSerializer.Deserialize<Models.User>(userJson);
+                var plans = await _premiumPlanService.GetAllAsync();
+                var plan = plans.FirstOrDefault(p => p.PlanId == planId);
+                if (plan == null)
+                {
+                    return new JsonResult(new { success = false, message = "Gói Premium không tồn tại" });
+                }
+
+                var existingSubscription = (await _userPremiumSubscriptionService.GetAllAsync())
+                    .FirstOrDefault(s => s.UserId == user.UserId && s.IsActive && !s.IsDeleted);
+
+                if (existingSubscription == null)
+                {
+                    return new JsonResult(new { success = false, message = "Không tìm thấy subscription" });
+                }
+
+                EmailMessage emailMessage;
+                if (isRenewal)
+                {
+                    // Email gia hạn
+                    emailMessage = new EmailMessage
+                    {
+                        To = user.Email,
+                        Subject = "Xác Nhận Gia Hạn Gói Premium Thành Công",
+                        Body = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; color: #333; line-height: 1.6; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
+        .content {{ background: #ffffff; padding: 20px; border: 1px solid #eee; border-radius: 0 0 5px 5px; }}
+        .button {{ display: inline-block; padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }}
+        .footer {{ text-align: center; font-size: 12px; color: #777; margin-top: 20px; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>Xin chào {user.Username}!</h2>
+        </div>
+        <div class='content'>
+            <p>Chúng tôi rất vui mừng thông báo rằng gói Premium <strong>'{plan.PlanName}'</strong> của bạn đã được gia hạn thành công.</p>
+            <p><strong>Thông tin chi tiết:</strong></p>
+            <ul>
+                <li>Thời gian kết thúc mới: <strong>{existingSubscription.EndDate:dd/MM/yyyy}</strong></li>
+            </ul>
+            <p>Cảm ơn bạn đã tiếp tục đồng hành cùng LingoVerse!</p>
+            <p><a href='mailto:support@lingoverse.com' class='button'>Liên hệ hỗ trợ</a></p>
+        </div>
+        <div class='footer'>
+            <p>Trân trọng,<br/>Đội ngũ LingoVerse<br/>© 2025 LingoVerse. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>",
+                        IsHtml = true
+                    };
+                }
+                else
+                {
+                    // Email đăng ký mới
+                    emailMessage = new EmailMessage
+                    {
+                        To = user.Email,
+                        Subject = "Xác Nhận Kích Hoạt Gói Premium Thành Công",
+                        Body = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; color: #333; line-height: 1.6; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
+        .content {{ background: #ffffff; padding: 20px; border: 1px solid #eee; border-radius: 0 0 5px 5px; }}
+        .button {{ display: inline-block; padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }}
+        .footer {{ text-align: center; font-size: 12px; color: #777; margin-top: 20px; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>Xin chào {user.Username}!</h2>
+        </div>
+        <div class='content'>
+            <p>Chúc mừng bạn! Gói Premium <strong>'{plan.PlanName}'</strong> của bạn đã được kích hoạt thành công.</p>
+            <p><strong>Thông tin chi tiết:</strong></p>
+            <ul>
+                <li>Thời gian bắt đầu: <strong>{existingSubscription.StartDate:dd/MM/yyyy}</strong></li>
+                <li>Thời gian kết thúc: <strong>{existingSubscription.EndDate:dd/MM/yyyy}</strong></li>
+            </ul>
+            <p>Cảm ơn bạn đã tin tưởng và lựa chọn LingoVerse!</p>
+            <p><a href='mailto:support@lingoverse.com' class='button'>Liên hệ hỗ trợ</a></p>
+        </div>
+        <div class='footer'>
+            <p>Trân trọng,<br/>Đội ngũ LingoVerse<br/>© 2025 LingoVerse. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>",
+                        IsHtml = true
+                    };
+                }
+
+                await _emailService.SendEmailAsync(emailMessage);
+                return new JsonResult(new { success = true, message = "Email xác nhận đã được gửi" });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = $"Lỗi khi gửi email: {ex.Message}" });
             }
         }
 

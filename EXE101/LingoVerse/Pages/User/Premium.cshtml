@@ -164,7 +164,7 @@
             }, 1000);
         }
 
-        function startPaymentCheck(planId, paymentCode, statusElement) {
+        async function startPaymentCheck(planId, paymentCode, statusElement) {
             checkInterval = setInterval(async () => {
                 try {
                     const response = await fetch(`/User/Premium?handler=CheckPayment&paymentCode=${encodeURIComponent(paymentCode)}&planId=${planId}`, {
@@ -179,6 +179,22 @@
                         clearInterval(checkInterval);
                         statusElement.textContent = result.message || 'Thanh toán thành công!';
                         statusElement.className = 'success';
+
+                        // Gọi API gửi email dựa trên loại (gia hạn hay đăng ký mới)
+                        try {
+                            const emailResponse = await fetch(`/User/Premium?handler=SendConfirmationEmail&planId=${planId}&isRenewal=${result.isRenewal}`, {
+                                method: 'GET'
+                            });
+                            const emailResult = await emailResponse.json();
+                            if (emailResult.success) {
+                                console.log('Email sent successfully:', emailResult.message);
+                            } else {
+                                console.error('Failed to send email:', emailResult.message);
+                            }
+                        } catch (emailError) {
+                            console.error('Error sending email:', emailError);
+                        }
+
                         setTimeout(() => paymentModal.querySelector('.btn-close').click(), 3000);
                     } else if (remainingTime > 0) {
                         console.log('Payment not yet confirmed:', result.message);

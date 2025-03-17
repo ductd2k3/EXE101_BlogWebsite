@@ -15,6 +15,8 @@ namespace LingoVerse
 
             builder.Services.AddHttpClient();
             builder.Services.AddHttpContextAccessor();
+            //Add signlR
+            builder.Services.AddSignalR();
             // Add services to the container.
             builder.Services.AddRazorPages();
             //Add database
