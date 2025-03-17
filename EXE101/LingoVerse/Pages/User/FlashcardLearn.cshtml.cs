@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -40,50 +40,32 @@ namespace LingoVerse.Pages.User
             allFlashcards = new Dictionary<string, List<TermDefinition>>
             {
                 {
-                    "What is a programming language?", new List<TermDefinition>
+                    "Hello", new List<TermDefinition>
                     {
-                        new TermDefinition { TermId = 1, Definition = "A formal language that specifies a set of instructions for a computer", IsCorrect = true },
-                        new TermDefinition { TermId = 2, Definition = "A tool used to design user interfaces", IsCorrect = false },
-                        new TermDefinition { TermId = 3, Definition = "A document that outlines program requirements", IsCorrect = false },
-                        new TermDefinition { TermId = 4, Definition = "A database management system", IsCorrect = false }
+                        new TermDefinition { TermId = 1, Definition = "Xin chào", IsCorrect = true },
+                        new TermDefinition { TermId = 2, Definition = "Tạm biệt", IsCorrect = false },
+                        new TermDefinition { TermId = 3, Definition = "Từ chối", IsCorrect = false },
+                        new TermDefinition { TermId = 4, Definition = "Chúc mừng", IsCorrect = false }
                     }
                 },
                 {
-                    "What is C#?", new List<TermDefinition>
+                    "Goodbye", new List<TermDefinition>
                     {
-                        new TermDefinition { TermId = 5, Definition = "A programming language developed by Microsoft", IsCorrect = true },
-                        new TermDefinition { TermId = 6, Definition = "A database query language", IsCorrect = false },
-                        new TermDefinition { TermId = 7, Definition = "A music note", IsCorrect = false },
-                        new TermDefinition { TermId = 8, Definition = "A markup language", IsCorrect = false }
+                        new TermDefinition { TermId = 5, Definition = "Tức giận", IsCorrect = false },
+                        new TermDefinition { TermId = 6, Definition = "Tạm biệt", IsCorrect = true },
+                        new TermDefinition { TermId = 7, Definition = "Vui vẻ", IsCorrect = false },
+                        new TermDefinition { TermId = 8, Definition = "Đi nào", IsCorrect = false }
                     }
                 },
                 {
-                    "What is ASP.NET?", new List<TermDefinition>
+                    "Thank you", new List<TermDefinition>
                     {
-                        new TermDefinition { TermId = 9, Definition = "A web framework developed by Microsoft", IsCorrect = true },
-                        new TermDefinition { TermId = 10, Definition = "A programming language", IsCorrect = false },
-                        new TermDefinition { TermId = 11, Definition = "A database system", IsCorrect = false },
-                        new TermDefinition { TermId = 12, Definition = "An operating system", IsCorrect = false }
+                        new TermDefinition { TermId = 9, Definition = "Chào hỏi", IsCorrect = false },
+                        new TermDefinition { TermId = 10, Definition = "Cảm ơn", IsCorrect = true },
+                        new TermDefinition { TermId = 11, Definition = "hài lòng", IsCorrect = false },
+                        new TermDefinition { TermId = 12, Definition = "Vui vẻ", IsCorrect = false }
                     }
                 },
-                {
-                    "What is HTML?", new List<TermDefinition>
-                    {
-                        new TermDefinition { TermId = 13, Definition = "A markup language for creating web pages", IsCorrect = true },
-                        new TermDefinition { TermId = 14, Definition = "A programming language", IsCorrect = false },
-                        new TermDefinition { TermId = 15, Definition = "A database system", IsCorrect = false },
-                        new TermDefinition { TermId = 16, Definition = "A web server", IsCorrect = false }
-                    }
-                },
-                {
-                    "What is CSS?", new List<TermDefinition>
-                    {
-                        new TermDefinition { TermId = 17, Definition = "A style sheet language for describing the presentation of a document", IsCorrect = true },
-                        new TermDefinition { TermId = 18, Definition = "A programming language", IsCorrect = false },
-                        new TermDefinition { TermId = 19, Definition = "A security protocol", IsCorrect = false },
-                        new TermDefinition { TermId = 20, Definition = "A database management system", IsCorrect = false }
-                    }
-                }
             };
 
             // Clone the original flashcard data to use for testing sessions

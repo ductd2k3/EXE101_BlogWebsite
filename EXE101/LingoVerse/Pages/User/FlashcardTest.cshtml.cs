@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
@@ -21,82 +21,82 @@ public class FlashCardTestModel : PageModel
         FinalListTest = new Dictionary<string, List<TermOption>>();
 
         // Question 1
-        var question1 = "What is the capital of France?";
+        var question1 = "Hello";
         var options1 = new List<TermOption>
         {
             new TermOption {
                 Type = "Definition",
                 IsCorrect = true,
-                Term = new Term { TermName = "Paris", Definition = "Paris" }
+                Term = new Term { TermName = "Xin chào", Definition = "Xin chào" }
             },
             new TermOption {
                 Type = "Definition",
                 IsCorrect = false,
-                Term = new Term { TermName = "London", Definition = "London" }
+                Term = new Term { TermName = "Tạm biệt", Definition = "Tạm biệt" }
             },
             new TermOption {
                 Type = "Definition",
                 IsCorrect = false,
-                Term = new Term { TermName = "Berlin", Definition = "Berlin" }
+                Term = new Term { TermName = "Từ chối", Definition = "Từ chối" }
             },
             new TermOption {
                 Type = "Definition",
                 IsCorrect = false,
-                Term = new Term { TermName = "Madrid", Definition = "Madrid" }
+                Term = new Term { TermName = "Chúc mừng", Definition = "Chúc mừng" }
             }
         };
         FinalListTest.Add(question1, options1);
 
         // Question 2
-        var question2 = "What is 2 + 2?";
+        var question2 = "Goodbye";
         var options2 = new List<TermOption>
         {
             new TermOption {
                 Type = "Term",
+                IsCorrect = false,
+                Term = new Term { TermName = "Tức giận", Definition = "Tức giận" }
+            },
+            new TermOption {
+                Type = "Term",
                 IsCorrect = true,
-                Term = new Term { TermName = "4", Definition = "Four" }
+                Term = new Term { TermName = "Tạm biệt", Definition = "Tạm biệt" }
             },
             new TermOption {
                 Type = "Term",
                 IsCorrect = false,
-                Term = new Term { TermName = "3", Definition = "Three" }
+                Term = new Term { TermName = "Vui vẻ", Definition = "Vui vẻ" }
             },
             new TermOption {
                 Type = "Term",
                 IsCorrect = false,
-                Term = new Term { TermName = "5", Definition = "Five" }
-            },
-            new TermOption {
-                Type = "Term",
-                IsCorrect = false,
-                Term = new Term { TermName = "6", Definition = "Six" }
+                Term = new Term { TermName = "Đi nào", Definition = "Đi nào" }
             }
         };
         FinalListTest.Add(question2, options2);
 
         // Question 3
-        var question3 = "What is H2O?";
+        var question3 = "Thank you";
         var options3 = new List<TermOption>
         {
             new TermOption {
                 Type = "Definition",
+                IsCorrect = false,
+                Term = new Term { TermName = "Chào hỏi", Definition = "Chào hỏi" }
+            },
+            new TermOption {
+                Type = "Definition",
                 IsCorrect = true,
-                Term = new Term { TermName = "Water", Definition = "Water" }
+                Term = new Term { TermName = "Cảm ơn", Definition = "Cảm ơn" }
             },
             new TermOption {
                 Type = "Definition",
                 IsCorrect = false,
-                Term = new Term { TermName = "Air", Definition = "Air" }
+                Term = new Term { TermName = "hài lòng", Definition = "hài lòng" }
             },
             new TermOption {
                 Type = "Definition",
                 IsCorrect = false,
-                Term = new Term { TermName = "Fire", Definition = "Fire" }
-            },
-            new TermOption {
-                Type = "Definition",
-                IsCorrect = false,
-                Term = new Term { TermName = "Earth", Definition = "Earth" }
+                Term = new Term { TermName = "Vui vẻ", Definition = "Vui vẻ" }
             }
         };
         FinalListTest.Add(question3, options3);
