@@ -3,9 +3,20 @@
     color: #e0e1dd;
     font-family: 'Arial', sans-serif;
 }
+/* Search and Filter */
+.search-filter-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
 .search-bar {
+    flex: 1;
     max-width: 500px;
-    margin: 20px auto;
+    min-width: 200px;
 }
 
     .search-bar .form-control {
@@ -30,6 +41,61 @@
         .search-bar .btn:hover {
             background: #4361ee;
         }
+
+.filter-btn {
+    background: #415a77;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    color: #e0e1dd;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+    .filter-btn:hover {
+        background: #778da9;
+        transform: scale(1.05);
+    }
+
+.modal-content {
+    background: rgba(27, 38, 59, 0.95);
+    border: 1px solid #778da9;
+    border-radius: 15px;
+    color: #e0e1dd;
+}
+
+.modal-header {
+    border-bottom: 1px solid #778da9;
+}
+
+.modal-title {
+    color: #00b4d8;
+}
+
+.modal-footer {
+    border-top: 1px solid #778da9;
+}
+
+.filter-modal select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #778da9;
+    color: #e0e1dd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+    .filter-modal select:hover, .filter-modal select:focus {
+        background: rgba(65, 90, 119, 0.8);
+        color: #fff;
+        box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
+        outline: none;
+    }
 
 .create-btn {
     background: #28a745;
@@ -108,27 +174,3 @@
     color: #778da9;
     cursor: not-allowed;
 }
-.filter-selects {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    max-width: 500px;
-    margin: 10px auto;
-}
-
-    .filter-selects select {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid #778da9;
-        color: #e0e1dd;
-        border-radius: 20px;
-        padding: 8px 15px;
-        width: 100%;
-        transition: all 0.3s;
-    }
-
-        .filter-selects select:hover, .filter-selects select:focus {
-            background: rgba(65, 90, 119, 0.8);
-            color: #fff;
-            box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
-            outline: none;
-        }

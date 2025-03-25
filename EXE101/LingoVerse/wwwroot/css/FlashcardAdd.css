@@ -1,0 +1,158 @@
+﻿
+body {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #e0e1dd;
+    font-family: 'Arial', sans-serif;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 0;
+}
+
+.create-container {
+    background: #1b263b;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(119, 141, 169, 0.5);
+}
+
+    .create-container h2 {
+        color: #00b4d8;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .create-container .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #e0e1dd;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+        .create-container .form-control::placeholder {
+            color: #778da9;
+        }
+
+    .create-container .form-label {
+        color: #e0e1dd;
+        font-size: 0.9rem;
+    }
+
+.set-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-selects {
+    display: flex;
+    gap: 15px;
+}
+
+    .filter-selects select {
+        background: rgba(13, 27, 42, 0.9);
+        border: 1px solid #415a77;
+        color: #e0e1dd;
+        border-radius: 5px;
+        padding: 10px 15px;
+        width: 100%;
+        transition: all 0.3s;
+    }
+
+        .filter-selects select:invalid {
+            border-color: #dc3545;
+        }
+
+        .filter-selects select:hover, .filter-selects select:focus {
+            background: rgba(65, 90, 119, 0.8);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
+            outline: none;
+        }
+
+.word-entry {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .word-entry textarea {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #e0e1dd;
+        border-radius: 5px;
+        resize: none;
+        height: 40px;
+        width: 100%;
+    }
+
+    .word-entry .vocab {
+        flex: 1; /* Chiếm 40% chiều rộng */
+    }
+
+    .word-entry .definition {
+        flex: 2; /* Chiếm 60% chiều rộng */
+    }
+
+.delete-btn {
+    background: #dc3545;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    font-size: 14px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+    .delete-btn:hover {
+        background: #c82333;
+    }
+
+.add-word-btn {
+    background: #00b4d8;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 25px auto;
+}
+
+    .add-word-btn:hover {
+        background: #4361ee;
+    }
+
+.save-btn {
+    background: #28a745;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 30px;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 20px auto 0;
+}
+
+    .save-btn:hover {
+        background: #218838;
+    }
+
+

@@ -23,7 +23,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark">
                 <a class="navbar-brand" href="/">
-                    <img src="~/img/logo.png" alt="Logo" style="width: 60px; margin-right: 10px; vertical-align: middle;">
+                    <img src="~/img/logo2.png" alt="Logo" style="width: 60px; margin-right: 10px; vertical-align: middle;">
                     LingoVerse
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -32,6 +32,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="/">Trang Chủ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/User/Community">Cộng Đồng</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/FlashcardList">Thẻ ghi nhớ</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/Premium">Nâng cấp</a></li>
                         <li class="nav-item">
@@ -42,11 +43,15 @@
                             @{
                                 if (string.IsNullOrEmpty(userJson))
                                 {
-                                    <a class="nav-link" href="/User/Login">Đăng nhập</a>
+                                <li class="nav-item">
+                                    <a class="btn login-btn" href="/User/Login"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
+                                </li>
                                 }
                                 else
                                 {
-                                    <a class="nav-link" href="/User/Logout">Đăng xuất</a>
+                                <li class="nav-item">
+                                    <a class="btn login-btn" href="/User/Logout"><i class="fas fa-sign-in-alt"></i> Đăng xuất</a>
+                                </li>
                                 }
                             }
                         </li>

@@ -9,39 +9,49 @@
 <div class="container search-filter-container">
     <div class="search-bar">
         <form class="d-flex">
-            <input class="form-control me-2" asp-for="SearchTerm" type="search" placeholder="Tìm kiếm bài báo..." aria-label="Search">
+            <input class="form-control me-2" type="search" placeholder="Tìm kiếm bài báo..." aria-label="Search">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
-    <form method="get">
-        <div class="filter-selects">
-            <input asp-for="SearchTerm" type="hidden">
+    <button class="filter-btn" data-bs-toggle="modal" data-bs-target="#filterModal">
+        <i class="fas fa-filter"></i> Lọc
+    </button>
+</div>
 
-            <select class="form-select" asp-for="LanguageId" onchange="this.form.submit()">
-                <option value="">Chọn ngôn ngữ</option>
-                @foreach (var language in Model.Languages)
-                {
-                    <option value="@(language.LanguageId)">@(language.LanguageName)</option>
-                }
-            </select>
-
-            <select class="form-select" asp-for="LevelId" onchange="this.form.submit()">
-                <option value="">Chọn cấp độ</option>
-                @foreach (var level in Model.Levels)
-                {
-                    <option value="@(level.LevelId)">@(level.LevelName)</option>
-                }
-            </select>
-
-            <select id="category" class="form-select" asp-for="CategoryId" onchange="this.form.submit()">
-                <option value="">Chọn chủ đề</option>
-                @foreach (var category in Model.Categories)
-                {
-                    <option value="@(category.CategoryId)">@(category.CategoryName)</option>
-                }
-            </select>
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Lọc Bài Báo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body filter-modal">
+                <select class="form-select">
+                    <option value="">Chọn ngôn ngữ</option>
+                    <option value="english">Tiếng Anh</option>
+                    <option value="french">Tiếng Pháp</option>
+                    <option value="japanese">Tiếng Nhật</option>
+                </select>
+                <select class="form-select">
+                    <option value="">Chọn cấp độ</option>
+                    <option value="beginner">Sơ cấp</option>
+                    <option value="intermediate">Trung cấp</option>
+                    <option value="advanced">Nâng cao</option>
+                </select>
+                <select class="form-select">
+                    <option value="">Chọn chủ đề</option>
+                    <option value="news">Tin tức</option>
+                    <option value="science">Khoa học và công nghệ</option>
+                    <option value="sports">Thể thao</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="applyFilter">Áp dụng</button>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 
 <!-- Main Content -->

@@ -6,11 +6,15 @@
 /* Search and Filter */
 .search-filter-container {
     margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 .search-bar {
     max-width: 500px;
-    margin: 0 auto 15px;
+    flex-grow: 1;
 }
 
     .search-bar .form-control {
@@ -36,31 +40,63 @@
             background: #4361ee;
         }
 
-.filter-selects {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    max-width: 500px;
-    margin: 0 auto;
+.filter-btn {
+    background: #0d1b2a;
+    border: 1px solid #415a77;
+    color: #e0e1dd;
+    border-radius: 20px;
+    padding: 8px 20px;
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
-    .filter-selects select {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid #778da9;
-        color: #e0e1dd;
-        border-radius: 20px;
-        padding: 8px 15px;
-        width: 100%;
-        transition: all 0.3s;
+    .filter-btn:hover {
+        background: #1b263b;
+        color: #fff;
+        box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
     }
 
-        .filter-selects select:hover, .filter-selects select:focus {
-            background: rgba(65, 90, 119, 0.8);
-            color: #fff;
-            box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
-            outline: none;
-        }
+.modal-content {
+    background: #1b263b;
+    color: #e0e1dd;
+    border-radius: 10px;
+    border: none;
+}
 
+.modal-header {
+    border-bottom: 1px solid #415a77;
+}
+
+.modal-title {
+    color: #00b4d8;
+}
+
+.modal-footer {
+    border-top: 1px solid #415a77;
+}
+
+.filter-modal select {
+    background: #0d1b2a;
+    border: 1px solid #415a77;
+    color: #e0e1dd;
+    border-radius: 5px;
+    padding: 8px 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+    .filter-modal select:hover, .filter-modal select:focus {
+        background: #1b263b;
+        color: #fff;
+        box-shadow: 0 0 8px rgba(65, 90, 119, 0.4);
+        outline: none;
+    }
+
+    .filter-modal select option {
+        background: #1b263b;
+        color: #e0e1dd;
+    }
 /* Hot News Section */
 .hot-news {
     margin: 30px 0;

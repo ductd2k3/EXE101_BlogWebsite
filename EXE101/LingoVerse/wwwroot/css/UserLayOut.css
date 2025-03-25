@@ -1,8 +1,18 @@
-﻿body {
+﻿/* Điều chỉnh chiều rộng của body để scrollbar không ảnh hưởng */
+html {
+    overflow-y: scroll; /* Luôn hiển thị scrollbar */
+}
+
+body {
     background: linear-gradient(135deg, #0d1b2a, #1b263b);
     color: #e0e1dd;
     font-family: 'Arial', sans-serif;
 }
+    /* Ngăn lệch khi mở modal */
+    body.modal-open {
+        padding-right: 0 !important; /* Ngăn thêm padding khi modal mở */
+        overflow-y: scroll; /* Luôn giữ scrollbar để tránh thay đổi chiều rộng */
+    }
 
 .header {
     background: linear-gradient(90deg, #1b263b 0%, #415a77 50%, #778da9 100%);
@@ -13,15 +23,11 @@
 }
 
     .header .navbar-brand {
-        background: linear-gradient(135deg, #00b4d8, #e0e1dd); /* Gradient cho logo */
-        -webkit-background-clip: text; /* Áp dụng gradient cho chữ */
-        -webkit-text-fill-color: transparent; /* Làm chữ trong suốt để thấy gradient */
+        color: #fff;
         font-size: 1.8rem;
         font-weight: bold;
-        text-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         transition: transform 0.3s;
-        display: flex;
-        align-items: center;
     }
 
         .header .navbar-brand:hover {
@@ -29,19 +35,35 @@
         }
 
     .header .nav-link {
-        background: linear-gradient(135deg, #e0e1dd, #00b4d8); /* Gradient cho các link */
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #e0e1dd !important;
         padding: 10px 20px;
         border-radius: 20px;
         transition: all 0.3s;
     }
 
         .header .nav-link:hover {
-            background: linear-gradient(135deg, #4361ee, #00b4d8); /* Gradient khi hover */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+    /* Login Button */
+    .header .login-btn {
+        background: #00b4d8;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 20px;
+        color: #fff;
+        font-weight: bold;
+        transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .header .login-btn:hover {
+            background: #4361ee;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
         }
 
 
