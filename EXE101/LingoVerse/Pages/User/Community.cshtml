@@ -7,120 +7,190 @@
 </head>
 <!-- Main Content -->
 <div class="container">
+    <!-- Search Bar -->
     <div class="search-bar">
         <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Tìm kiếm bài đăng..." aria-label="Search" id="search-input">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            <input class="form-control me-2"
+                   type="search"
+                   placeholder="Tìm kiếm bài đăng..."
+                   aria-label="Search"
+                   id="search-input" />
+            <button class="btn" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
         </form>
     </div>
 
+    <!-- Post Creation Section -->
     <div class="post-creation">
         <h2><i class="fas fa-pen"></i> Đăng bài mới</h2>
+        <input type="text"
+               class="post-title-input"
+               id="post-title"
+               placeholder="Tiêu đề bài đăng..." />
         <div id="editor"></div>
         <div class="post-options">
             <button class="btn btn-post" id="post-button">Đăng</button>
         </div>
     </div>
 
+    <!-- Posts List -->
     <div class="posts-list" id="posts-list">
         <div class="post-item">
+            <h5>Hôm Nay Là Một Ngày Đẹp Trời</h5>
             <div class="post-content">
-                <p>Hôm nay là một ngày đẹp trời, mọi người nghĩ sao?</p>
+                <p>Mọi người nghĩ sao về thời tiết hôm nay?</p>
             </div>
-            <small><i class="far fa-clock"></i> 17/03/2025, 10:30:00</small>
+            <div class="post-info">
+                <i class="far fa-clock"></i> 17/03/2025, 10:30:00
+                <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 120 lượt vote</span>
+            </div>
         </div>
         <div class="post-item">
+            <h5>Có Ai Thích Nghe Nhạc Không?</h5>
             <div class="post-content">
-                <p><strong>Có ai thích nghe nhạc không?</strong> Mình vừa tìm được một bài hay lắm tại <a href="https://example.com" target="_blank">đây</a>!</p>
+                <p>
+                    <strong>Mình vừa tìm được một bài hay lắm</strong> tại
+                    <a href="https://example.com" target="_blank">đây</a>!
+                </p>
             </div>
-            <small><i class="far fa-clock"></i> 17/03/2025, 09:15:00</small>
+            <div class="post-info">
+                <i class="far fa-clock"></i> 17/03/2025, 09:15:00
+                <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 85 lượt vote</span>
+            </div>
         </div>
         <div class="post-item">
+            <h5>Review Bộ Phim Mới Xem</h5>
             <div class="post-content">
-                <p>Mình vừa xem một bộ phim rất thú vị tại <a href="https://example.com" target="_blank">link này</a>, mọi người đã xem chưa?</p>
+                <p>
+                    Mình vừa xem một bộ phim rất thú vị tại
+                    <a href="https://example.com" target="_blank">link này</a>, mọi
+                    người đã xem chưa?
+                </p>
             </div>
-            <small><i class="far fa-clock"></i> 16/03/2025, 20:45:00</small>
+            <div class="post-info">
+                <i class="far fa-clock"></i> 16/03/2025, 20:45:00
+                <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 200 lượt vote</span>
+            </div>
         </div>
         <div class="post-item">
+            <h5>Cuối Tuần Này Đi Chơi Nhé!</h5>
             <div class="post-content">
-                <p>Cuối tuần này có ai đi chơi không? Rủ mình với nhé!</p>
+                <p>Có ai rảnh không? Rủ mình với nhé!</p>
             </div>
-            <small><i class="far fa-clock"></i> 16/03/2025, 15:30:00</small>
+            <div class="post-info">
+                <i class="far fa-clock"></i> 16/03/2025, 15:30:00
+                <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 150 lượt vote</span>
+            </div>
         </div>
         <div class="post-item">
+            <h5>Mưa Cả Ngày</h5>
             <div class="post-content">
-                <p><em>Mưa cả ngày</em>, ở nhà đọc sách thôi mọi người ơi.</p>
+                <p><em>Ở nhà đọc sách</em> thôi mọi người ơi.</p>
             </div>
-            <small><i class="far fa-clock"></i> 15/03/2025, 14:20:00</small>
+            <div class="post-info">
+                <i class="far fa-clock"></i> 15/03/2025, 14:20:00
+                <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 95 lượt vote</span>
+            </div>
         </div>
     </div>
 
+    <!-- Load More Button -->
     <div class="load-more-container">
         <button class="btn btn-load-more" id="load-more">Tải thêm</button>
     </div>
 </div>
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const quill = new Quill('#editor', {
-            theme: 'snow',
+    document.addEventListener("DOMContentLoaded", function () {
+        const quill = new Quill("#editor", {
+            theme: "snow",
             modules: {
                 toolbar: [
-                    ['bold', 'italic', 'underline'],
-                    ['link'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    ['clean']
-                ]
+                    ["bold", "italic", "underline"],
+                    ["link"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["clean"],
+                ],
             },
-            placeholder: 'Chia sẻ suy nghĩ của bạn...'
+            placeholder: "Nội dung bài đăng...",
         });
 
         // Xử lý đăng bài mới
-        document.getElementById('post-button').addEventListener('click', function () {
-            const content = quill.root.innerHTML;
-            if (!content.trim() || content === '<p><br></p>') {
-                alert('Vui lòng nhập nội dung bài đăng!');
-                return;
-            }
+        document
+            .getElementById("post-button")
+            .addEventListener("click", function () {
+                const title = document.getElementById("post-title").value.trim();
+                const content = quill.root.innerHTML.trim();
+                if (!title) {
+                    alert("Vui lòng nhập tiêu đề bài đăng!");
+                    return;
+                }
+                if (!content || content === "<p><br></p>") {
+                    alert("Vui lòng nhập nội dung bài đăng!");
+                    return;
+                }
 
-            const postsList = document.getElementById('posts-list');
-            const postItem = document.createElement('div');
-            postItem.className = 'post-item';
-            postItem.innerHTML = `
+                const postsList = document.getElementById("posts-list");
+                const postItem = document.createElement("div");
+                postItem.className = "post-item";
+                postItem.innerHTML = `
+                        <h5>${title}</h5>
                         <div class="post-content">${content}</div>
-                        <small><i class="far fa-clock"></i> ${new Date().toLocaleString('vi-VN')}</small>
+                        <div class="post-info">
+                            <i class="far fa-clock"></i> ${new Date().toLocaleString(
+                    "vi-VN"
+                )}
+                            <span class="vote-highlight"><i class="fas fa-thumbs-up"></i> 0 lượt vote</span>
+                        </div>
                     `;
-            // Thêm sự kiện onclick cho bài đăng mới
-            postItem.addEventListener('click', function () {
-                window.location.href = '/User/CommunityDetail';
+                postItem.addEventListener("click", function () {
+                    window.location.href = "/User/CommunityDetail";
+                });
+                postsList.insertBefore(postItem, postsList.firstChild);
+                document.getElementById("post-title").value = "";
+                quill.setContents([]);
             });
-            postsList.insertBefore(postItem, postsList.firstChild);
-            quill.setContents([]);
-        });
 
         // Thêm sự kiện onclick cho các bài đăng tĩnh
-        document.querySelectorAll('.post-item').forEach(item => {
-            item.addEventListener('click', function () {
-                window.location.href = '/User/CommunityDetail';
+        document.querySelectorAll(".post-item").forEach((item) => {
+            item.addEventListener("click", function () {
+                alert(
+                    "Bạn vừa click vào bài đăng: " +
+                    this.querySelector("h5").textContent
+                );
             });
         });
 
         // Xử lý tìm kiếm
-        document.querySelector('.search-bar form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const posts = document.querySelectorAll('.post-item');
-            posts.forEach(post => {
-                const content = post.querySelector('.post-content').textContent.toLowerCase();
-                post.style.display = content.includes(query) ? 'block' : 'none';
+        document
+            .querySelector(".search-bar form")
+            .addEventListener("submit", function (e) {
+                e.preventDefault();
+                const query = document
+                    .getElementById("search-input")
+                    .value.toLowerCase();
+                const posts = document.querySelectorAll(".post-item");
+                posts.forEach((post) => {
+                    const title = post.querySelector("h5").textContent.toLowerCase();
+                    const content = post
+                        .querySelector(".post-content")
+                        .textContent.toLowerCase();
+                    post.style.display =
+                        title.includes(query) || content.includes(query)
+                            ? "block"
+                            : "none";
+                });
             });
-        });
 
         // Xử lý nút "Tải thêm"
-        document.getElementById('load-more').addEventListener('click', function () {
-            // Logic tải thêm nếu cần
-        });
+        document
+            .getElementById("load-more")
+            .addEventListener("click", function () {
+                // Logic tải thêm nếu cần
+            });
     });
 </script>

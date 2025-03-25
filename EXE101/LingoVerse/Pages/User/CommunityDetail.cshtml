@@ -7,80 +7,83 @@
 </head>
 <!-- Main Content -->
 <div class="container">
-    <!-- Post Detail Section -->
+    <!-- Post Detail -->
     <div class="post-detail">
-        <h1>Chi Tiết Bài Đăng</h1>
-        <div class="post-content" id="post-content">
-            <!-- Nội dung bài đăng sẽ được thêm bằng JS -->
+        <h1>Hôm Nay Là Một Ngày Đẹp Trời</h1>
+        <div class="post-info">
+            <i class="far fa-clock"></i> 17/03/2025, 10:30:00
+            <span class="vote-highlight" id="vote-count"><i class="fas fa-thumbs-up"></i> 120 lượt vote</span>
         </div>
-        <div class="post-meta" id="post-timestamp">
-            <!-- Thời gian đăng sẽ được thêm bằng JS -->
+        <div class="post-content">
+            <p>Mọi người nghĩ sao về thời tiết hôm nay? Trời xanh, nắng nhẹ, thật tuyệt để ra ngoài dạo chơi hoặc ngồi đọc sách bên cửa sổ. Mình đang nghĩ đến việc đi công viên chiều nay, có ai muốn tham gia không?</p>
+        </div>
+        <div class="post-actions">
+            <button class="btn btn-vote" id="vote-button"><i class="fas fa-thumbs-up"></i> Vote</button>
+            <button class="btn btn-share" id="share-button"><i class="fas fa-share"></i> Chia sẻ</button>
+            <button class="btn btn-report" id="report-button"><i class="fas fa-flag"></i> Báo cáo</button>
         </div>
     </div>
 
     <!-- Comments Section -->
     <div class="comments-section">
-        <h2><i class="fas fa-comments"></i> Bình luận</h2>
+        <h3><i class="fas fa-comments"></i> Bình luận</h3>
         <textarea class="comment-input" id="comment-input" placeholder="Viết bình luận của bạn..."></textarea>
-        <button class="btn btn-comment" id="comment-button">Đăng bình luận</button>
+        <div class="text-end">
+            <button class="btn btn-comment" id="comment-button">Đăng bình luận</button>
+        </div>
         <div class="comment-list" id="comment-list">
-            <!-- Bình luận sẽ được thêm bằng JS -->
+            <div class="comment-item">
+                <p>Rất đồng ý! Trời đẹp thế này không ra ngoài thì phí lắm.</p>
+                <small><i class="far fa-clock"></i> 17/03/2025, 11:00:00</small>
+            </div>
+            <div class="comment-item">
+                <p>Mình cũng thích trời như hôm nay, nhưng đang bận làm việc, tiếc ghê.</p>
+                <small><i class="far fa-clock"></i> 17/03/2025, 10:45:00</small>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Lấy dữ liệu bài đăng từ localStorage
-        const postData = JSON.parse(localStorage.getItem('selectedPost')) || {
-            content: '<p><strong>Hôm nay mình học được một mẹo học từ vựng mới!</strong> Mọi người thử dùng flashcard xem, rất hiệu quả. Mình thường học 10 từ mỗi ngày, còn bạn thì sao? <u>Có ai có cách học nào hay hơn không?</u></p>',
-            timestamp: '17/03/2025, 10:30:00'
-        };
+        // Xử lý Vote
+        let voteCount = 120;
+        document.getElementById('vote-button').addEventListener('click', function () {
+            voteCount++;
+            document.getElementById('vote-count').innerHTML = `<i class="fas fa-thumbs-up"></i> ${voteCount} lượt vote`;
+            alert('Bạn đã vote bài viết này!');
+        });
 
-        // Hiển thị bài đăng
-        document.getElementById('post-content').innerHTML = postData.content;
-        document.getElementById('post-timestamp').innerHTML = `<i class="far fa-clock"></i> ${postData.timestamp}`;
+        // Xử lý Chia sẻ
+        document.getElementById('share-button').addEventListener('click', function () {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link bài viết đã được sao chép để chia sẻ!');
+            });
+        });
 
-        // Danh sách bình luận mẫu
-        let comments = [
-            { text: 'Mình cũng dùng flashcard, nhưng hay quên lắm. Có cách nào nhớ lâu không?', timestamp: '17/03/2025, 11:00:00' },
-            { text: 'Cảm ơn mẹo hay! Mình sẽ thử ngay hôm nay.', timestamp: '17/03/2025, 11:15:00' }
-        ];
+        // Xử lý Báo cáo
+        document.getElementById('report-button').addEventListener('click', function () {
+            alert('Cảm ơn bạn đã báo cáo! Chúng tôi sẽ xem xét bài viết này.');
+        });
 
-        // Hiển thị bình luận ban đầu
-        renderComments();
-
-        // Xử lý đăng bình luận
+        // Xử lý Đăng bình luận
         document.getElementById('comment-button').addEventListener('click', function () {
-            const commentText = document.getElementById('comment-input').value.trim();
-
-            if (!commentText) {
+            const content = document.getElementById('comment-input').value.trim();
+            if (!content) {
                 alert('Vui lòng nhập nội dung bình luận!');
                 return;
             }
 
-            const newComment = {
-                text: commentText,
-                timestamp: new Date().toLocaleString('vi-VN')
-            };
-
-            comments.unshift(newComment);
-            renderComments();
-            document.getElementById('comment-input').value = ''; // Reset textarea
-        });
-
-        // Hàm hiển thị bình luận
-        function renderComments() {
             const commentList = document.getElementById('comment-list');
-            commentList.innerHTML = '';
-            comments.forEach(comment => {
-                const commentItem = document.createElement('div');
-                commentItem.className = 'comment-item';
-                commentItem.innerHTML = `
-                            <p>${comment.text}</p>
-                            <small><i class="far fa-clock"></i> ${comment.timestamp}</small>
-                        `;
-                commentList.appendChild(commentItem);
-            });
-        }
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment-item';
+            commentItem.innerHTML = `
+                        <p>${content}</p>
+                        <small><i class="far fa-clock"></i> ${new Date().toLocaleString('vi-VN')}</small>
+                    `;
+            commentList.insertBefore(commentItem, commentList.firstChild);
+            document.getElementById('comment-input').value = '';
+        });
     });
 </script>

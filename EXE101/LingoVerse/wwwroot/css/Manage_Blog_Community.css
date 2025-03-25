@@ -1,0 +1,117 @@
+﻿body {
+    background: linear-gradient(135deg, #0d1b2a, #1b263b);
+    color: #e0e1dd;
+    font-family: 'Arial', sans-serif;
+}
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+.header {
+    background: linear-gradient(90deg, #1b263b 0%, #415a77 50%, #778da9 100%);
+    padding: 15px 20px;
+    box-shadow: 0 5px 15px rgba(65, 90, 119, 0.6);
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #1b263b;
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(119, 141, 169, 0.5);
+    }
+
+.btn-custom {
+    background: #00b4d8;
+    border: none;
+    border-radius: 20px;
+    transition: background 0.3s;
+}
+
+    .btn-custom:hover {
+        background: #4361ee;
+    }
+
+.btn-danger {
+    border-radius: 20px;
+}
+
+.table {
+    background: #2a3547;
+    color: #e0e1dd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .table th, .table td {
+        border: 1px solid #778da9;
+        padding: 12px;
+    }
+
+    .table th {
+        background: #415a77;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+.badge-pending {
+    background: #ff9800;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.badge-approved {
+    background: #4caf50;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.modal-content {
+    background: #1b263b;
+    color: #e0e1dd; /* Màu chữ chính trong modal */
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    background: #415a77;
+    border-bottom: 1px solid #778da9;
+}
+
+.modal-title {
+    color: #e0e1dd; /* Màu tiêu đề modal */
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+    .modal-body h5 {
+        color: #00b4d8; /* Màu tiêu đề trong nội dung modal */
+    }
+
+    .modal-body p, .modal-body div {
+        color: #e0e1dd; /* Màu chữ nội dung */
+    }
+
+@media (max-width: 991px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

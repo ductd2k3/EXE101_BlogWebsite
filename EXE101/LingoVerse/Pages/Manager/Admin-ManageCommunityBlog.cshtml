@@ -1,0 +1,151 @@
+﻿@page
+@model LingoVerse.Pages.Manager.Admin_ManageCommunityBlogModel
+@{
+    Layout = "_AdminLayout";
+}
+<head>
+    <link rel="stylesheet" href="~/css/Manage_Blog_Community.css" asp-append-version="true" />
+</head>
+<div class="main-content">
+    <div class="header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Quản lý bài viết người dùng</h2>
+            <div>
+                <span class="me-3"><i class="fas fa-user-circle"></i> Admin</span>
+                <button class="btn btn-custom"><i class="fas fa-bell"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 style="color: #e0e1dd;" class="card-title">Danh sách bài viết</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tiêu đề</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articleList">
+                        <!-- Danh sách bài viết sẽ được thêm bằng JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal chi tiết bài viết -->
+<div class="modal fade" id="articleModal" tabindex="-1" aria-labelledby="articleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="articleModalLabel">Chi tiết bài viết</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>Tiêu đề:</h5>
+                <p id="modalTitle"></p>
+                <h5>Nội dung:</h5>
+                <div id="modalContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Dữ liệu mẫu với nội dung dài hơn
+    let articles = [
+        {
+            id: 1,
+            title: "Những điều thú vị về công nghệ hiện đại",
+            status: "pending",
+            content: `
+                        <p>Công nghệ hiện đại đnag thay đổi cách chúng ta sống và làm việc hàng ngày. Từ những chiếc điện thoại thông minh nhỏ gọn trong tay đến các hệ thống trí tuệ nhân tạo phức tạp, thế giới đang chứng kiến một cuộc cách mạng kỹ thuật số chưa từng có. Ví dụ, các ứng dụng như Google Maps không chỉ giúp chúng ta tìm đường mà còn dự đoán thời gian di chuyển dựa trên dữ liệu giao thông thời gian thực.</p>
+                        <p>Trong lĩnh vực y tế, công nghệ in 3D đã được sử dụng để tạo ra các bộ phận cơ thể nhân tạo, giúp cải thiện chất lượng cuộc sống cho hàng triệu người. Ngoài ra, sự phát triển của Internet vạn vật (IoT) đang kết nối mọi thứ, từ tủ lạnh đến ô tô, tạo ra một mạng lưới thông minh giúp tiết kiệm năng lượng và tăng hiệu quả.</p>
+                        <p>Tuy nhiên, công nghệ cũng mang lại những thách thức. Vấn đề bảo mật dữ liệu ngày càng trở nên nghiêm trọng khi các vụ tấn công mạng ngày càng tinh vi. Các công ty lớn như Facebook và Google thường xuyên phải đối mặt với những tranh cãi về quyền riêng tư. Dù vậy, không thể phủ nhận rằng công nghệ đã và đang mở ra một kỷ nguyên mới đầy tiềm năng cho nhân loại.</p>
+                    `
+        },
+        {
+            id: 2,
+            title: "Du lịch thế giới qua những câu chuyện",
+            status: "approved",
+            content: `
+                        <p>Du lịch không chỉ là việc di chuyển từ nơi này đến nơi khác, mà còn là hành trình khám phá văn hóa, con người và những câu chuyện độc đáo. Hãy tưởng tượng bạn đang đứng giữa quảng trường cổ kính ở Rome, nghe tiếng chuông nhà thờ vang lên, hay thưởng thức một tách cà phê thơm lừng tại một quán nhỏ ở Paris. Mỗi địa điểm đều có một câu chuyện riêng.</p>
+                        <p>Tôi từng đến một ngôi làng nhỏ ở Việt Nam, nơi người dân làm ra những chiếc nón lá truyền thống. Họ kể rằng nghề này đã được truyền qua nhiều thế hệ, và mỗi chiếc nón là một tác phẩm nghệ thuật chứa đựng tâm hồn của người làm ra nó. Ở một nơi khác, như Iceland, bạn sẽ bị mê hoặc bởi những thác nước hùng vĩ và câu chuyện về các vị thần Bắc Âu trong truyền thuyết.</p>
+                        <p>Du lịch cũng dạy chúng ta sự khiêm tốn và lòng biết ơn. Khi bạn nhìn thấy những người dân địa phương sống hạnh phúc với những điều giản dị, bạn sẽ nhận ra rằng hạnh phúc không đến từ vật chất mà từ những khoảnh khắc được chia sẻ. Đó là lý do tôi luôn khuyến khích mọi người xách ba lô lên và khám phá thế giới.</p>
+                    `
+        }
+    ];
+
+    // Hàm hiển thị danh sách bài viết
+    function renderArticleList() {
+        const articleList = document.getElementById('articleList');
+        articleList.innerHTML = '';
+
+        articles.forEach((article, index) => {
+            const statusBadge = article.status === 'pending'
+                ? '<span class="badge-pending">Chờ duyệt</span>'
+                : '<span class="badge-approved">Đã duyệt</span>';
+
+            const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${article.title}</td>
+                            <td>${statusBadge}</td>
+                            <td>
+                                ${article.status === 'pending' ?
+                    `<button class="btn btn-custom btn-sm me-2" onclick="approveArticle(${article.id})">Phê duyệt</button>` : ''}
+                                <button class="btn btn-custom btn-sm me-2" onclick="viewArticle(${article.id})">Xem</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteArticle(${article.id})">Xóa</button>
+                            </td>
+                        </tr>
+                    `;
+            articleList.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    // Hàm phê duyệt bài viết
+    window.approveArticle = function (id) {
+        const article = articles.find(a => a.id === id);
+        if (article) {
+            article.status = 'approved';
+            renderArticleList();
+            console.log(`Đã phê duyệt bài viết ID: ${id}`);
+            // Thêm code gửi yêu cầu phê duyệt lên server ở đây
+        }
+    };
+
+    // Hàm xem chi tiết bài viết
+    window.viewArticle = function (id) {
+        const article = articles.find(a => a.id === id);
+        if (article) {
+            // Cập nhật nội dung modal
+            document.getElementById('modalTitle').textContent = article.title;
+            document.getElementById('modalContent').innerHTML = article.content;
+
+            // Hiển thị modal
+            const modal = new bootstrap.Modal(document.getElementById('articleModal'));
+            modal.show();
+        }
+    };
+
+    // Hàm xóa bài viết
+    window.deleteArticle = function (id) {
+        if (confirm('Bạn có chắc muốn xóa bài viết này?')) {
+            articles = articles.filter(a => a.id !== id);
+            renderArticleList();
+            console.log(`Đã xóa bài viết ID: ${id}`);
+            // Thêm code gửi yêu cầu xóa lên server ở đây
+        }
+    };
+
+    // Khởi tạo danh sách khi tải trang
+    document.addEventListener('DOMContentLoaded', renderArticleList);
+</script>

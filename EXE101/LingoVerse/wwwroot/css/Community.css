@@ -46,9 +46,23 @@
         font-size: 1.5rem;
         margin-bottom: 15px;
     }
-/* Tùy chỉnh Quill Editor */
-.ql-toolbar.ql-snow {
+
+.post-title-input {
     background: #1b263b;
+    border: 1px solid #778da9;
+    border-radius: 10px;
+    padding: 10px;
+    color: #e0e1dd;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+    .post-title-input::placeholder {
+        color: #778da9;
+    }
+
+.ql-toolbar.ql-snow {
+    background: #415a77; /* Đồng bộ với trang quản lý */
     border: 1px solid #778da9;
     border-radius: 10px 10px 0 0;
 }
@@ -63,27 +77,29 @@
 }
 
 .ql-editor::before {
-    color: #778da9 !important; /* Màu placeholder */
+    color: #778da9 !important; /* Placeholder */
 }
 
 .ql-snow .ql-picker {
     color: #e0e1dd;
 }
 
-.ql-snow .ql-stroke,
-.ql-snow .ql-fill {
-    stroke: #e0e1dd;
-    fill: #e0e1dd;
+.ql-snow .ql-stroke {
+    stroke: #e0e1dd !important; /* Màu nét nút B, I, U */
 }
-/* Sửa nút B và U cho rõ hơn */
+
+.ql-snow .ql-fill {
+    fill: #e0e1dd !important; /* Màu nền nút */
+}
+
 .ql-snow .ql-formats button {
-    opacity: 0.7; /* Giảm độ đậm ban đầu */
+    opacity: 1; /* Loại bỏ nhòe mặc định */
     transition: opacity 0.2s;
 }
 
     .ql-snow .ql-formats button:hover,
     .ql-snow .ql-formats button.ql-active {
-        opacity: 1; /* Tăng độ sáng khi hover hoặc active */
+        opacity: 0.7; /* Hiệu ứng hover/active nhẹ */
     }
 
 .ql-snow .ql-picker-options {
@@ -128,16 +144,21 @@
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s;
-    cursor: pointer; /* Thêm con trỏ tay khi hover */
+    cursor: pointer;
 }
 
     .post-item:hover {
         transform: translateY(-5px);
     }
-    /* Có thể thêm style khi active để tạo hiệu ứng click */
+
     .post-item:active {
         transform: translateY(0);
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .post-item h5 {
+        color: #00b4d8;
+        margin-bottom: 10px;
     }
 
     .post-item .post-content {
@@ -145,9 +166,20 @@
         color: #e0e1dd;
     }
 
-    .post-item small {
+    .post-item .post-info {
+        font-size: 0.9rem;
         color: #778da9;
     }
+
+.vote-highlight {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #00b4d8;
+    background: rgba(0, 180, 216, 0.1);
+    padding: 3px 10px;
+    border-radius: 15px;
+    margin-left: 10px;
+}
 
 /* Load More Button */
 .load-more-container {
@@ -170,7 +202,8 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .post-creation, .post-item {
+    .post-creation,
+    .post-item {
         padding: 15px;
     }
 }

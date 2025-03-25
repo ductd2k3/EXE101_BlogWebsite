@@ -11,53 +11,116 @@
 </head>
 
 <!-- Article Form -->
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Thông tin bài viết</h5>
-            <form id="articleForm">
-                <div class="mb-3">
-                    <label for="articleTitle" class="form-label">Tiêu đề</label>
-                    <input type="text" class="form-control" id="articleTitle" placeholder="Nhập tiêu đề bài viết">
-                </div>
-                <div class="mb-3">
-                    <label for="articleLanguage" class="form-label">Ngôn ngữ</label>
-                    <select class="form-select" id="articleLanguage">
-                        <option value="">Chọn ngôn ngữ</option>
-                        <option value="english">Tiếng Anh</option>
-                        <option value="french">Tiếng Pháp</option>
-                        <option value="japanese">Tiếng Nhật</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="articleLevel" class="form-label">Cấp độ</label>
-                    <select class="form-select" id="articleLevel">
-                        <option value="">Chọn cấp độ</option>
-                        <option value="beginner">Sơ cấp (A1-A2)</option>
-                        <option value="intermediate">Trung cấp (B1-B2)</option>
-                        <option value="advanced">Nâng cao (C1-C2)</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="articleImage" class="form-label">Hình ảnh</label>
-                    <input type="file" class="form-control" id="articleImage" accept="image/*">
-                    <img id="imagePreview" alt="Xem trước hình ảnh">
-                </div>
-                <div class="ai-section">
-                    <h5 class="card-title">Tạo nội dung với AI</h5>
-                    <textarea id="aiPrompt" placeholder="Nhập yêu cầu cho AI (ví dụ: Viết bài về AI bằng tiếng Anh, cấp độ trung cấp)"></textarea>
-                    <button class="btn btn-custom mt-2" id="generateAIContent">Tạo nội dung</button>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Nội dung</label>
-                    <div id="articleEditor" style="height: 300px;"></div>
-                </div>
-                <button type="button" class="btn btn-custom" id="saveArticle">Lưu bài viết</button>
-            </form>
+<div class="main-content">
+    <div class="header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Quản lý bài viết chi tiết với AI</h2>
+            <div>
+                <span class="me-3"><i class="fas fa-user-circle"></i> Admin</span>
+                <button class="btn btn-custom"><i class="fas fa-bell"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Thông tin bài viết</h5>
+                <form id="articleForm">
+                    <!-- Thông tin chung -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="articleTitle" class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="articleTitle" placeholder="Nhập tiêu đề bài viết">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="articleLanguage" class="form-label">Ngôn ngữ</label>
+                            <select class="form-select" id="articleLanguage">
+                                <option value="">Chọn ngôn ngữ</option>
+                                <option value="english">Tiếng Anh</option>
+                                <option value="french">Tiếng Pháp</option>
+                                <option value="japanese">Tiếng Nhật</option>
+                                <option value="chinese">Tiếng Trung</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="articleLevel" class="form-label">Cấp độ</label>
+                            <select class="form-select" id="articleLevel">
+                                <option value="">Chọn cấp độ</option>
+                                <option value="beginner">Sơ cấp</option>
+                                <option value="intermediate">Trung cấp</option>
+                                <option value="advanced">Cao cấp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleImage" class="form-label">Hình ảnh</label>
+                        <input type="file" class="form-control" id="articleImage" accept="image/*">
+                        <img id="imagePreview" alt="Xem trước hình ảnh">
+                    </div>
+
+                    <!-- Tabs cho AI và viết tay -->
+                    <ul class="nav nav-tabs" id="contentTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="ai-tab" data-bs-toggle="tab" href="#aiContent" role="tab">Tạo bằng AI</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="manual-tab" data-bs-toggle="tab" href="#manualContent" role="tab">Viết tay</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="contentTabContent">
+                        <!-- Tab Tạo bằng AI -->
+                        <div class="tab-pane fade show active" id="aiContent" role="tabpanel">
+                            <div class="ai-section">
+                                <h5 class="card-title">Tạo nội dung với AI</h5>
+                                <textarea id="aiPrompt" placeholder="Nhập yêu cầu cho AI (ví dụ: Viết bài về AI bằng tiếng Anh, cấp độ trung cấp)"></textarea>
+                                <button type="button" class="btn btn-custom mt-2" id="generateAIContent">Tạo nội dung</button>
+                                <button type="button" class="btn btn-custom mt-2" id="copyToQuill" style="display: none;">Sao chép sang Quill JS</button>
+                                <div id="aiOutput"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Viết tay -->
+                        <div class="tab-pane fade" id="manualContent" role="tabpanel">
+                            <div class="mb-3">
+                                <label class="form-label">Nội dung</label>
+                                <div id="articleEditor" style="height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chức năng tạo câu hỏi -->
+                    <div class="mt-4">
+                        <h5 class="card-title">Tạo câu hỏi trắc nghiệm</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="questionCount" class="form-label">Số lượng câu hỏi</label>
+                                <select class="form-select" id="questionCount">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-md-9 d-flex align-items-end">
+                                <button type="button" class="btn btn-custom me-2" id="generateQuestions">Tạo câu hỏi</button>
+                                <button type="button" class="btn btn-custom" id="addManualQuestion">Thêm câu hỏi bằng tay</button>
+                            </div>
+                        </div>
+                        <div id="questionOutput"></div>
+                        <div id="manualQuestionsContainer"></div>
+                    </div>
+
+                    <button type="button" class="btn btn-custom mt-3" id="saveArticle">Lưu bài viết</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@4.0.12/marked.min.js"></script>
 <script>
     // Khởi tạo Quill Editor
     const quill = new Quill('#articleEditor', {
@@ -75,7 +138,6 @@
     // Xử lý xem trước hình ảnh
     const imageInput = document.getElementById('articleImage');
     const imagePreview = document.getElementById('imagePreview');
-
     imageInput.addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
@@ -91,6 +153,153 @@
         }
     });
 
+    // Tích hợp Gemini API cho việc tạo nội dung
+    let aiGeneratedContent = '';
+    document.getElementById('generateAIContent').addEventListener('click', async function () {
+        const prompt = document.getElementById('aiPrompt').value;
+        const language = document.getElementById('articleLanguage').value;
+        const level = document.getElementById('articleLevel').value;
+        if (!prompt) {
+            alert('Vui lòng nhập yêu cầu cho AI!');
+            return;
+        }
+        if (!language || !level) {
+            alert('Vui lòng chọn ngôn ngữ và cấp độ!');
+            return;
+        }
+
+        const fullPrompt = `${prompt} bằng ngôn ngữ ${language}, cấp độ ${level}`;
+        document.getElementById('aiOutput').innerHTML = '<p>Đang tạo nội dung...</p>';
+        try {
+            const response = await callGeminiAPI(fullPrompt);
+            aiGeneratedContent = response;
+            document.getElementById('aiOutput').innerHTML = marked.parse(response);
+            document.getElementById('copyToQuill').style.display = 'inline-block';
+        } catch (error) {
+            console.error('Lỗi khi gọi Gemini API:', error);
+            document.getElementById('aiOutput').innerHTML = '<p>Có lỗi xảy ra khi tạo nội dung.</p>';
+        }
+    });
+
+    // Sao chép nội dung AI sang Quill JS
+    document.getElementById('copyToQuill').addEventListener('click', function () {
+        quill.root.innerHTML = marked.parse(aiGeneratedContent);
+        document.getElementById('manual-tab').click();
+    });
+
+    // Hàm đếm số từ/từ vựng theo ngôn ngữ
+    function countWords(content, language) {
+        if (language === 'japanese' || language === 'chinese') {
+            // Đếm ký tự thay vì từ vì không có khoảng trắng
+            return content.replace(/[\s\n]/g, '').length;
+        }
+        // Ngôn ngữ dùng khoảng trắng (Anh, Pháp,...)
+        return content.split(/\s+/).filter(word => word.length > 0).length;
+    }
+
+    // Tạo câu hỏi trắc nghiệm tự động
+    document.getElementById('generateQuestions').addEventListener('click', async function () {
+        const questionCount = parseInt(document.getElementById('questionCount').value);
+        const content = aiGeneratedContent || quill.root.innerText.trim();
+        const language = document.getElementById('articleLanguage').value;
+        const level = document.getElementById('articleLevel').value;
+
+        if (!content) {
+            document.getElementById('questionOutput').innerHTML = '<p>Nội dung trống! Vui lòng tạo bài viết trước.</p>';
+            return;
+        }
+
+        const unitCount = countWords(content, language);
+        const maxQuestions = Math.floor(unitCount / (language === 'japanese' || language === 'chinese' ? 20 : 50));
+        if (questionCount > maxQuestions) {
+            const checkPrompt = `Nội dung có ${unitCount} ${language === 'japanese' || language === 'chinese' ? 'ký tự' : 'từ'}. Có phù hợp để tạo ${questionCount} câu hỏi trắc nghiệm không? Nếu không, đề xuất số lượng phù hợp.`;
+            document.getElementById('questionOutput').innerHTML = '<p>Đang kiểm tra...</p>';
+            try {
+                const checkResponse = await callGeminiAPI(checkPrompt);
+                document.getElementById('questionOutput').innerHTML = marked.parse(checkResponse);
+                return;
+            } catch (error) {
+                document.getElementById('questionOutput').innerHTML = '<p>Lỗi khi kiểm tra tính phù hợp!</p>';
+                return;
+            }
+        }
+
+        const questionPrompt = `Dựa trên nội dung sau, tạo ${questionCount} câu hỏi trắc nghiệm (multiple choice) bằng ngôn ngữ ${language}, cấp độ ${level}. Mỗi câu hỏi có 4 đáp án (A, B, C, D) và chỉ rõ đáp án đúng. Nội dung: "${content}"`;
+        document.getElementById('questionOutput').innerHTML = '<p>Đang tạo câu hỏi...</p>';
+        try {
+            const response = await callGeminiAPI(questionPrompt);
+            document.getElementById('questionOutput').innerHTML = marked.parse(response);
+        } catch (error) {
+            console.error('Lỗi khi tạo câu hỏi:', error);
+            document.getElementById('questionOutput').innerHTML = '<p>Lỗi khi tạo câu hỏi! Vui lòng thử lại.</p>';
+        }
+    });
+
+    // Tạo câu hỏi bằng tay
+    let manualQuestions = [];
+    document.getElementById('addManualQuestion').addEventListener('click', function () {
+        const container = document.getElementById('manualQuestionsContainer');
+        const questionId = manualQuestions.length + 1;
+        const html = `
+                    <div class="manual-question" id="manualQuestion${questionId}">
+                        <h6>Câu hỏi ${questionId}</h6>
+                        <input type="text" class="form-control mb-2" id="manualQuestionText${questionId}" placeholder="Nhập câu hỏi">
+                        <input type="text" class="form-control mb-2" id="manualOptionA${questionId}" placeholder="Đáp án A">
+                        <input type="text" class="form-control mb-2" id="manualOptionB${questionId}" placeholder="Đáp án B">
+                        <input type="text" class="form-control mb-2" id="manualOptionC${questionId}" placeholder="Đáp án C">
+                        <input type="text" class="form-control mb-2" id="manualOptionD${questionId}" placeholder="Đáp án D">
+                        <input type="text" class="form-control mb-2" id="manualCorrectAnswer${questionId}" placeholder="Đáp án đúng (A, B, C, D)">
+                        <button type="button" class="btn btn-custom mt-2" onclick="saveManualQuestion(${questionId})">Lưu câu hỏi</button>
+                    </div>
+                `;
+        container.insertAdjacentHTML('beforeend', html);
+    });
+
+    // Hàm lưu câu hỏi thủ công
+    window.saveManualQuestion = function (questionId) {
+        const questionText = document.getElementById(`manualQuestionText${questionId}`).value;
+        const optionA = document.getElementById(`manualOptionA${questionId}`).value;
+        const optionB = document.getElementById(`manualOptionB${questionId}`).value;
+        const optionC = document.getElementById(`manualOptionC${questionId}`).value;
+        const optionD = document.getElementById(`manualOptionD${questionId}`).value;
+        const correctAnswer = document.getElementById(`manualCorrectAnswer${questionId}`).value.toUpperCase();
+
+        if (!questionText || !optionA || !optionB || !optionC || !optionD || !correctAnswer) {
+            alert('Vui lòng điền đầy đủ thông tin câu hỏi!');
+            return;
+        }
+
+        const manualQuestion = {
+            question: questionText,
+            options: { A: optionA, B: optionB, C: optionC, D: optionD },
+            correct: correctAnswer
+        };
+
+        manualQuestions[questionId - 1] = manualQuestion; // Lưu vào mảng
+        renderManualQuestions();
+    };
+
+    // Hiển thị danh sách câu hỏi thủ công
+    function renderManualQuestions() {
+        const container = document.getElementById('manualQuestionsContainer');
+        container.innerHTML = ''; // Xóa toàn bộ nội dung cũ
+
+        manualQuestions.forEach((q, index) => {
+            const html = `
+                        <div class="manual-question" id="manualQuestion${index + 1}">
+                            <h6>Câu hỏi ${index + 1}: ${q.question}</h6>
+                            <ul>
+                                <li>A. ${q.options.A} ${q.correct === 'A' ? '(Đúng)' : ''}</li>
+                                <li>B. ${q.options.B} ${q.correct === 'B' ? '(Đúng)' : ''}</li>
+                                <li>C. ${q.options.C} ${q.correct === 'C' ? '(Đúng)' : ''}</li>
+                                <li>D. ${q.options.D} ${q.correct === 'D' ? '(Đúng)' : ''}</li>
+                            </ul>
+                        </div>
+                    `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
     // Xử lý nút Lưu bài viết
     document.getElementById('saveArticle').addEventListener('click', function () {
         const title = document.getElementById('articleTitle').value;
@@ -98,34 +307,34 @@
         const level = document.getElementById('articleLevel').value;
         const image = document.getElementById('articleImage').files[0];
         const content = quill.root.innerHTML;
-        console.log({ title, language, level, image, content });
-        // Thêm code gửi dữ liệu lên server ở đây
+        const articleData = {
+            title,
+            language,
+            level,
+            image: image ? image.name : null,
+            content,
+            questions: manualQuestions
+        };
+        console.log('Bài viết đã lưu:', articleData);
+        alert('Bài viết đã được lưu thành công!');
+        // Thêm code gửi dữ liệu lên server ở đây nếu cần
     });
 
-    // Xử lý nút Tạo nội dung với AI
-    document.getElementById('generateAIContent').addEventListener('click', async function () {
-        const prompt = document.getElementById('aiPrompt').value;
-        if (!prompt) {
-            alert('Vui lòng nhập yêu cầu cho AI!');
-            return;
-        }
-
-        // Placeholder cho việc gọi API Gemini
-        try {
-            const response = await fakeGeminiAPI(prompt);
-            quill.root.innerHTML = response;
-        } catch (error) {
-            console.error('Lỗi khi gọi Gemini API:', error);
-            quill.root.innerHTML = '<p>Có lỗi xảy ra khi tạo nội dung.</p>';
-        }
-    });
-
-    // Hàm giả lập gọi API Gemini (thay bằng API thật của bạn)
-    async function fakeGeminiAPI(prompt) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(`<p>Nội dung mẫu từ AI: ${prompt}</p>`);
-            }, 1000);
+    // Hàm gọi Gemini API
+    async function callGeminiAPI(text) {
+        const apiKey = "AIzaSyAi-CupGekJ5o1IrYbXUuMp9nb3kVucuUo"; // Thay bằng API key của bạn
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: text }] }]
+            })
         });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Không thể xử lý!";
     }
 </script>

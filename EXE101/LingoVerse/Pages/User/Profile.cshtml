@@ -1,0 +1,88 @@
+﻿@page
+@model LingoVerse.Pages.User.ProfileModel
+@{
+}
+<head>
+    <link rel="stylesheet" href="~/css/Profile.css" asp-append-version="true" />
+</head>
+<div class="container">
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Avatar">
+            <h2>Trần Đình Đức</h2>
+            <p>ductdhe176150@fpt.edu.vn</p>
+        </div>
+
+        <!-- Thông tin cá nhân -->
+        <div class="profile-section">
+            <h4><i class="fas fa-user"></i> Thông tin cá nhân</h4>
+            <p><strong>Họ và tên:</strong> Trần Đình Đức</p>
+            <p><strong>Email:</strong> ductdhe176150@fpt.edu.vn</p>
+            <p><strong>Số điện thoại:</strong> 0987-654-321</p>
+            <p><strong>Ngày sinh:</strong> 12/05/1998</p>
+            <p><strong>Địa chỉ:</strong> 123 Đường Láng Hạ, Hà Nội, Việt Nam</p>
+        </div>
+
+        <!-- Thông tin giới thiệu -->
+        <div class="profile-section">
+            <h4><i class="fas fa-info-circle"></i> Thông tin giới thiệu</h4>
+            <p><strong>Giới thiệu:</strong> Xin chào! Tôi là Đình Đức, một người đam mê viết lách và chia sẻ kinh nghiệm học ngoại ngữ. Tôi thích khám phá các phương pháp học mới và truyền cảm hứng cho mọi người qua những bài viết của mình.</p>
+            <p><strong>Sở thích:</strong> Đọc sách, du lịch, học ngoại ngữ</p>
+            <p><strong>Tổng số lượt vote từ blog:</strong> <span class="vote-highlight">1,245 lượt</span></p>
+        </div>
+
+        <!-- Danh sách bài viết blog -->
+        <div class="blog-list">
+            <h4><i class="fas fa-blog"></i> Bài viết của tôi</h4>
+            <div class="blog-filter">
+                <select id="blogSort" onchange="sortBlogs()">
+                    <option value="votes">Sắp xếp theo lượt vote</option>
+                    <option value="date">Sắp xếp theo ngày đăng</option>
+                </select>
+            </div>
+            <div id="blogContainer">
+                <div class="blog-item">
+                    <h5>Học Tiếng Anh Qua Tin Tức - Bí Quyết Thành Công</h5>
+                    <p>Một số mẹo nhỏ giúp bạn cải thiện vốn từ vựng tiếng Anh qua các bài báo.</p>
+                    <p class="blog-info"><i class="fas fa-calendar-alt"></i> 20/03/2025 | <i class="fas fa-thumbs-up"></i> 450 lượt vote</p>
+                </div>
+                <div class="blog-item">
+                    <h5>Nhật Ký Học Kanji - Từ N5 Đến N3</h5>
+                    <p>Hành trình chinh phục 1000 chữ Kanji trong 6 tháng.</p>
+                    <p class="blog-info"><i class="fas fa-calendar-alt"></i> 18/03/2025 | <i class="fas fa-thumbs-up"></i> 320 lượt vote</p>
+                </div>
+                <div class="blog-item">
+                    <h5>Tại Sao Nên Học Ngoại Ngữ Qua Báo Chí?</h5>
+                    <p>Lợi ích của việc học ngoại ngữ từ các nguồn thực tế.</p>
+                    <p class="blog-info"><i class="fas fa-calendar-alt"></i> 15/03/2025 | <i class="fas fa-thumbs-up"></i> 475 lượt vote</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="edit-btn"><i class="fas fa-edit"></i> Chỉnh sửa hồ sơ</button>
+    </div>
+</div>
+
+<script>
+    function sortBlogs() {
+        const sortBy = document.getElementById('blogSort').value;
+        const container = document.getElementById('blogContainer');
+        const items = Array.from(container.getElementsByClassName('blog-item'));
+
+        items.sort((a, b) => {
+            if (sortBy === 'votes') {
+                const votesA = parseInt(a.querySelector('.blog-info').textContent.match(/(\d+) lượt vote/)[1]);
+                const votesB = parseInt(b.querySelector('.blog-info').textContent.match(/(\d+) lượt vote/)[1]);
+                return votesB - votesA; // Sắp xếp giảm dần theo vote
+            } else if (sortBy === 'date') {
+                const dateA = new Date(a.querySelector('.blog-info').textContent.match(/\d{2}\/\d{2}\/\d{4}/)[0].split('/').reverse().join('-'));
+                const dateB = new Date(b.querySelector('.blog-info').textContent.match(/\d{2}\/\d{2}\/\d{4}/)[0].split('/').reverse().join('-'));
+                return dateB - dateA; // Sắp xếp giảm dần theo ngày
+            }
+        });
+
+        // Xóa và thêm lại các item đã sắp xếp
+        container.innerHTML = '';
+        items.forEach(item => container.appendChild(item));
+    }
+</script>

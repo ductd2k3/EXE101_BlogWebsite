@@ -30,11 +30,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item"><a class="nav-link" href="/">Trang Chủ</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/Community">Cộng Đồng</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/FlashcardList">Thẻ ghi nhớ</a></li>
                         <li class="nav-item"><a class="nav-link" href="/User/Premium">Nâng cấp</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/User/About-Us">Về chúng tôi</a></li>
                         <li class="nav-item">
                             @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
                             @{
@@ -49,8 +50,16 @@
                                 }
                                 else
                                 {
-                                <li class="nav-item">
-                                    <a class="btn login-btn" href="/User/Logout"><i class="fas fa-sign-in-alt"></i> Đăng xuất</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&q=80" alt="Avatar" class="profile-avatar">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><a class="dropdown-item" href="/User/Profile"><i class="fas fa-id-card"></i> Hồ sơ</a></li>
+                                        
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="/User/Logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    </ul>
                                 </li>
                                 }
                             }

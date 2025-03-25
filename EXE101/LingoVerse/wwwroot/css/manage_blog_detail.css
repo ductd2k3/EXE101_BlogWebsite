@@ -65,8 +65,8 @@ label {
     }
 
     .form-select option {
-        background: #1b263b; /* Nền tối cho các tùy chọn */
-        color: #e0e1dd; /* Chữ sáng cho các tùy chọn */
+        background: #1b263b;
+        color: #e0e1dd;
     }
 
 .ql-container {
@@ -97,7 +97,7 @@ label {
 }
 
 .ai-section {
-    background: #1b263b; /* Đổi thành #1b263b */
+    background: #1b263b;
     padding: 15px;
     border-radius: 15px;
     margin-top: 20px;
@@ -115,4 +115,65 @@ label {
     margin-top: 10px;
     border-radius: 10px;
     display: none;
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+.tab-content {
+    padding: 20px;
+}
+
+.nav-tabs .nav-link {
+    color: #e0e1dd;
+    background: #1b263b;
+    border: none;
+}
+
+    .nav-tabs .nav-link.active {
+        background: #00b4d8;
+        color: #fff;
+    }
+
+.ai-section textarea {
+    min-height: 150px;
+}
+
+.ql-container {
+    min-height: 400px;
+}
+
+#aiOutput, #questionOutput, #manualQuestionsContainer {
+    background: #2a3547;
+    color: #e0e1dd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+    #aiOutput p, #aiOutput h1, #aiOutput h2, #aiOutput h3, #aiOutput ul, #aiOutput ol,
+    #questionOutput p, #questionOutput h1, #questionOutput h2, #questionOutput h3, #questionOutput ul, #questionOutput ol {
+        margin-bottom: 10px;
+    }
+
+    #aiOutput ul, #aiOutput ol, #questionOutput ul, #questionOutput ol {
+        padding-left: 20px;
+    }
+
+.manual-question {
+    border: 1px solid #778da9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }

@@ -66,7 +66,22 @@ body {
             box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
         }
 
+    .header .profile-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #00b4d8;
+        transition: transform 0.3s;
+    }
 
+        .header .profile-avatar:hover {
+            transform: scale(1.1);
+        }
+
+
+.dropdown-divider {
+    border-color: #778da9;
+}
 
 footer {
     background: linear-gradient(to top, #0d1b2a, #1b263b);

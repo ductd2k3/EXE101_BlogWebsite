@@ -1,0 +1,268 @@
+﻿@page
+@model LingoVerse.Pages.User.About_UsModel
+@{
+}
+<style>
+    .about-container {
+        margin: 40px auto;
+        max-width: 1200px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 25%;
+        background: #1b263b;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(119, 141, 169, 0.5);
+    }
+
+        .sidebar button {
+            width: 100%;
+            background: #415a77;
+            border: none;
+            color: #e0e1dd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+            .sidebar button:hover, .sidebar button.active {
+                background: #00b4d8;
+                color: #fff;
+                box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+            }
+
+    .content {
+        width: 75%;
+        background: #1b263b;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 20px rgba(119, 141, 169, 0.5);
+    }
+
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .content-section h2 {
+            color: #00b4d8;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .content-section p, .content-section li {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            color: #e0e1dd;
+        }
+
+        .content-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+            .content-section ul li {
+                position: relative;
+                padding-left: 20px;
+            }
+
+                .content-section ul li:before {
+                    content: "\f058";
+                    font-family: "Font Awesome 6 Free";
+                    font-weight: 900;
+                    color: #00b4d8;
+                    position: absolute;
+                    left: 0;
+                }
+
+    .contact-form {
+        background: rgba(65, 90, 119, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+        .contact-form input, .contact-form textarea {
+            background: #415a77;
+            border: none;
+            color: #e0e1dd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .contact-form button {
+            background: #28a745;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: #fff;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+            .contact-form button:hover {
+                background: #218838;
+                transform: scale(1.05);
+            }
+</style>
+<div class="container">
+    <div class="about-container">
+        <!-- Sidebar với các nút -->
+        <div class="sidebar">
+            <button class="tab-btn active" data-tab="team"><i class="fas fa-users"></i> Đội ngũ sáng lập</button>
+            <button class="tab-btn" data-tab="project"><i class="fas fa-book"></i> Giới thiệu dự án</button>
+            <button class="tab-btn" data-tab="reason"><i class="fas fa-lightbulb"></i> Lý do hình thành</button>
+            <button class="tab-btn" data-tab="concept"><i class="fas fa-cogs"></i> Ý tưởng sản phẩm</button>
+            <button class="tab-btn" data-tab="goals"><i class="fas fa-flag"></i> Mục tiêu thương hiệu</button>
+            <button class="tab-btn" data-tab="innovation"><i class="fas fa-rocket"></i> Đổi mới</button>
+            <button class="tab-btn" data-tab="market"><i class="fas fa-chart-line"></i> Quy mô thị trường</button>
+            <button class="tab-btn" data-tab="scale"><i class="fas fa-expand"></i> Khả năng mở rộng</button>
+            <button class="tab-btn" data-tab="impact"><i class="fas fa-globe"></i> Tầm ảnh hưởng</button>
+            <button class="tab-btn" data-tab="feasibility"><i class="fas fa-check-circle"></i> Tính khả thi</button>
+            <button class="tab-btn" data-tab="policies"><i class="fas fa-file-alt"></i> Chính sách</button>
+            <button class="tab-btn" data-tab="contact"><i class="fas fa-envelope"></i> Liên hệ</button>
+        </div>
+
+        <!-- Nội dung hiển thị -->
+        <div class="content">
+            <div id="team" class="content-section active">
+                <h2>Đội ngũ sáng lập</h2>
+                <p><strong>Cấu trúc góp vốn:</strong></p>
+                <ul>
+                    <li><strong>CEO: Phạm Thị Lan Phương</strong> - Lãnh đạo và định hướng công ty. Xây dựng mối quan hệ với nhà đầu tư, đối tác chiến lược. Đảm bảo sự phối hợp giữa các phòng ban để tối ưu hiệu suất kinh doanh.</li>
+                    <li><strong>COO: Quách Thị Minh Hương</strong> - Giám sát tiến độ dự án và đảm bảo chất lượng triển khai. Kiểm soát nguồn lực và tối ưu hóa hiệu suất hoạt động. Quản lý và chỉ đạo đội ngũ vận hành, đảm bảo quy trình làm việc trơn tru.</li>
+                    <li><strong>CTO: Trần Đình Đức</strong> - Phát triển và quản lý nền tảng công nghệ của LingoVerse. Đảm bảo hạ tầng kỹ thuật ổn định và bảo mật cao. Giám sát đội ngũ phát triển sản phẩm, tối ưu hiệu suất hệ thống.</li>
+                    <li><strong>CMO: Trần Ngô Hùng Vĩ</strong> - Xây dựng chiến lược tiếp thị và kế hoạch phát triển thị trường. Quản lý đội ngũ bán hàng, thúc đẩy doanh thu cho công ty. Nghiên cứu nhu cầu khách hàng và xu hướng thị trường để tối ưu sản phẩm.</li>
+                    <li><strong>CFO: Đặng Quốc Vương</strong> - Lập kế hoạch tài chính và quản lý dòng tiền. Kiểm soát rủi ro tài chính, đề xuất các biện pháp tối ưu ngân sách. Làm việc với nhà đầu tư và ngân hàng.</li>
+                    <li><strong>CCO: Vũ Khánh Hoàng</strong> - Xây dựng chiến lược chăm sóc khách hàng và phát triển cộng đồng người dùng. Giám sát chất lượng dịch vụ, đảm bảo trải nghiệm người dùng tốt nhất. Hỗ trợ các hoạt động đối ngoại, hợp tác kinh doanh để mở rộng thị trường.</li>
+                </ul>
+            </div>
+            <div id="project" class="content-section">
+                <h2>Giới thiệu dự án</h2>
+                <p><strong>Sứ mệnh:</strong> Chúng tôi cam kết thay đổi cách người học tiếp cận và ghi nhớ từ vựng bằng cách cung cấp nội dung học tập thực tế, hấp dẫn và có tính ứng dụng cao thông qua các bài blog.</p>
+                <p><strong>Tầm nhìn:</strong> Chúng tôi phấn đấu trở thành một trong những nền tảng học ngôn ngữ Anh, Trung, Nhật tốt nhất, nơi công nghệ tiên tiến và nội dung chất lượng hòa quyện, mở ra cánh cửa giúp mọi người tự tin hội nhập thế giới.</p>
+                <p><strong>Tên sản phẩm:</strong> LingoVerse - “Ling” gợi đến ngôn ngữ (language) và “verse” ám chỉ vũ trụ (universe), thể hiện một vũ trụ ngôn ngữ phong phú để người học khám phá.</p>
+                <p><strong>Logo:</strong> Hình ảnh cây đại diện cho sự bền vững, cam kết cung cấp nền tảng học ngôn ngữ ổn định và hiệu quả, giúp người học phát triển lâu dài.</p>
+                <p><strong>Màu sắc chủ đạo:</strong> Xanh lam đậm – tượng trưng cho chiều sâu, trí thông minh và sự tin tưởng, củng cố tinh thần học hỏi và khám phá liên tục.</p>
+                <p><strong>Câu chuyện thương hiệu:</strong> LingoVerse là không gian nơi mọi người bắt đầu hành trình học ngôn ngữ, giống như một cây non vươn lên từ hạt giống. Với mỗi bước tiến, người học sẽ phát triển, kết nối và mở rộng khả năng, như một cây trưởng thành với nhiều nhánh.</p>
+            </div>
+            <div id="reason" class="content-section">
+                <h2>Lý do hình thành</h2>
+                <p>Trong bối cảnh hội nhập quốc tế, việc học đa ngôn ngữ đang trở thành xu hướng phổ biến trong giới trẻ. Nhiều bạn không chỉ học tiếng Anh mà còn học thêm tiếng Hàn, Nhật, Trung để mở rộng cơ hội nghề nghiệp và hiểu biết văn hóa. Học qua phim, nhạc, sách và câu lạc bộ là cách hiệu quả để tiếp cận ngôn ngữ và văn hóa.</p>
+                <p><strong>LingoVerse ra đời để:</strong></p>
+                <ul>
+                    <li><strong>Khắc phục rào cản học truyền thống:</strong> Ghi nhớ từ vựng khó do thiếu lặp lại và ngữ cảnh thực tế; phương pháp sách giáo khoa nhàm chán, kém hiệu quả.</li>
+                    <li><strong>Xây dựng cộng đồng học tập:</strong> Kết nối người học để chia sẻ kiến thức, bài viết, Flashcard; gợi ý blog phù hợp dựa trên lịch sử học tập; hệ thống đánh giá nội dung đảm bảo chất lượng.</li>
+                </ul>
+            </div>
+            <div id="concept" class="content-section">
+                <h2>Ý tưởng sản phẩm</h2>
+                <p><strong>Giá trị cốt lõi:</strong> LingoVerse là nền tảng học ngôn ngữ sử dụng AI để ghi nhớ từ vựng hiệu quả qua blog, Flashcard và cộng đồng học tập.</p>
+                <p><strong>Lợi ích chính:</strong></p>
+                <ul>
+                    <li>Ghi nhớ từ vựng theo chủ đề một cách thông minh và có hệ thống.</li>
+                    <li>Cá nhân hóa trải nghiệm học tập với AI tạo nội dung, Flashcard, kế hoạch ôn tập.</li>
+                    <li>Học linh hoạt với dịch tự động, chấm điểm AI.</li>
+                    <li>Kết nối cộng đồng để chia sẻ kiến thức.</li>
+                </ul>
+                <p><strong>Sản phẩm thực tế:</strong> Nền tảng học ngôn ngữ trực tuyến tích hợp AI với hai gói tài khoản:</p>
+                <ul>
+                    <li><strong>Miễn phí:</strong> Đọc blog miễn phí với AI tạo nội dung hàng ngày; tạo và dùng Flashcard từ bài viết (giới hạn: không có AI luyện tập Flashcard).</li>
+                    <li><strong>Premium:</strong> Tất cả tính năng miễn phí + không giới hạn Flashcard AI, chấm điểm & feedback chi tiết, chia sẻ Flashcard, gợi ý bài viết, không quảng cáo, đánh giá nội dung. Giá: 59.000 VNĐ/tháng, 159.000 VNĐ/3 tháng, 319.000 VNĐ/6 tháng, 599.000 VNĐ/năm.</li>
+                </ul>
+                <p><strong>Tiện ích bổ trợ:</strong> Hỗ trợ 24/7 qua chatbot AI và tư vấn trực tiếp; dùng thử Premium miễn phí 7 ngày; diễn đàn cộng đồng; tích hợp đa nền tảng; thanh toán linh hoạt.</p>
+            </div>
+            <div id="goals" class="content-section">
+                <h2>Mục tiêu thương hiệu</h2>
+                <ul>
+                    <li><strong>Nền tảng học ngôn ngữ thông minh hàng đầu:</strong> Ứng dụng AI tiên tiến để học từ vựng và cải thiện ngôn ngữ hiệu quả, cá nhân hóa.</li>
+                    <li><strong>Cộng đồng học tập đa ngôn ngữ:</strong> Xây dựng nơi người dùng chia sẻ blog, kinh nghiệm và hỗ trợ lẫn nhau.</li>
+                    <li><strong>Học tập linh hoạt & tiết kiệm thời gian:</strong> Đọc blog, highlight từ vựng, ôn tập thông minh để rút ngắn thời gian học.</li>
+                    <li><strong>Thúc đẩy xu hướng học đa ngôn ngữ:</strong> Mở rộng sang nhiều ngôn ngữ, hỗ trợ giao tiếp quốc tế và phát triển sự nghiệp.</li>
+                </ul>
+            </div>
+            <div id="innovation" class="content-section">
+                <h2>Đổi mới</h2>
+                <ul>
+                    <li>Ứng dụng AI cá nhân hóa trải nghiệm học từ vựng.</li>
+                    <li>Kết hợp blog, video AI và Flashcard để tiếp cận từ vựng đa dạng.</li>
+                    <li>Hệ thống kiểm tra phát âm và sử dụng từ trong ngữ cảnh thực tế.</li>
+                    <li>Flashcard AI tối ưu hóa ghi nhớ.</li>
+                    <li>Học đa nền tảng (Web, Mobile, AI Voice Assistant).</li>
+                    <li>AI phân tích bài viết, đưa ra nhận xét cải tiến.</li>
+                </ul>
+            </div>
+            <div id="market" class="content-section">
+                <h2>Quy mô thị trường</h2>
+                <p><strong>PAM (Thị trường tiềm năng):</strong> Nhu cầu học tiếng Anh, Trung, Nhật ở Đông Nam Á rất lớn, tạo cơ hội cho LingoVerse.</p>
+                <p><strong>TAM (Tổng thị trường):</strong> 599.000 VNĐ/năm x 1,7 triệu sinh viên Việt Nam = 1.018 tỷ 300 triệu VNĐ/năm.</p>
+                <p><strong>SAM (Thị trường khả dụng):</strong> Sinh viên ĐH FPT (100% yêu cầu tiếng Anh, Nhật, Trung).</p>
+                <p><strong>SOM (Thị trường đạt được):</strong> Mục tiêu chiếm 20% SAM trong năm đầu.</p>
+            </div>
+            <div id="scale" class="content-section">
+                <h2>Khả năng mở rộng</h2>
+                <p><strong>Chiến lược:</strong> Trở thành nền tảng học từ vựng số 1 với AI; nội dung phân cấp từ cơ bản đến nâng cao; định vị giá trị độc đáo qua ngữ cảnh thực tế.</p>
+                <p><strong>Giá trị sản phẩm:</strong> Blog phong phú, video AI hướng dẫn, Premium không quảng cáo, kiểm tra phát âm.</p>
+                <p><strong>Cơ sở hạ tầng:</strong> Ứng dụng di động, AI nhận diện giọng nói, Flashcard thông minh.</p>
+                <p><strong>Nhân sự & đối tác:</strong> Tuyển chuyên gia AI, hợp tác với influencer, trung tâm ngoại ngữ, báo chí.</p>
+                <p><strong>Thực thi:</strong> AI tạo video ngắn, blog theo chủ đề (tin tức, du lịch, ẩm thực), Premium với đề test, dịch tự động, chấm điểm.</p>
+                <p><strong>Tài chính:</strong> Quảng cáo, Affiliate Marketing, Premium, khóa học AI.</p>
+            </div>
+            <div id="impact" class="content-section">
+                <h2>Tầm ảnh hưởng</h2>
+                <p><strong>Tiêu dùng bền vững:</strong> Phương pháp học hiệu quả, AI cá nhân hóa tiết kiệm thời gian.</p>
+                <p><strong>Giá trị chia sẻ:</strong> Nội dung miễn phí, cộng đồng tương tác, hợp tác trung tâm tiếng Anh, Trung, Nhật.</p>
+                <p><strong>Kinh tế xanh & tuần hoàn:</strong> AI tối ưu tài nguyên, tái sử dụng nội dung, chia sẻ Flashcard.</p>
+            </div>
+            <div id="feasibility" class="content-section">
+                <h2>Tính khả thi</h2>
+                <p><strong>Điểm mạnh:</strong> Hệ thống đa ngôn ngữ, nội dung phong phú, AI cá nhân hóa, mô hình kiếm tiền đa dạng.</p>
+                <p><strong>Khó khăn:</strong> Cạnh tranh cao, chi phí phát triển, giữ chân người dùng, bản quyền nội dung.</p>
+                <p><strong>Khắc phục:</strong> Định vị USP (học qua blog & Flashcard), tối ưu chi phí với AI, SEO & KOLs, quản lý bản quyền chặt chẽ.</p>
+                <p><strong>Cải tiến:</strong> Khóa học AI, mở rộng quốc tế, luyện nói với AI, phát triển app mobile.</p>
+            </div>
+            <div id="policies" class="content-section">
+                <h2>Chính sách</h2>
+                <p><strong>Chính sách bảo mật:</strong> Bảo vệ thông tin cá nhân, mã hóa dữ liệu, không chia sẻ với bên thứ ba.</p>
+                <p><strong>Chính sách đổi trả:</strong> Đổi trả trong 7 ngày nếu sản phẩm lỗi hoặc không đúng mô tả.</p>
+                <p><strong>Chính sách vận chuyển:</strong> Giao hàng 1-2 ngày nội thành, 3-5 ngày tỉnh, phí theo khoảng cách.</p>
+                <p><strong>Điều khoản sử dụng:</strong> Không sao chép nội dung, tuân thủ pháp luật khi giao dịch.</p>
+            </div>
+            <div id="contact" class="content-section">
+                <h2>Liên hệ</h2>
+                <p><strong>Hotline:</strong> 0123-456-789</p>
+                <p><strong>Email:</strong> <a href="mailto:support@lingoverse.com">support@lingoverse.com</a></p>
+                <div class="contact-form">
+                    <h4>Gửi yêu cầu hỗ trợ</h4>
+                    <input type="text" placeholder="Họ và tên">
+                    <input type="email" placeholder="Email">
+                    <textarea placeholder="Nội dung yêu cầu" rows="4"></textarea>
+                    <button type="submit"><i class="fas fa-paper-plane"></i> Gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+</script>

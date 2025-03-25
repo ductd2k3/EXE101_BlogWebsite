@@ -3,7 +3,7 @@
     color: #e0e1dd;
     font-family: 'Arial', sans-serif;
 }
-/* Post Detail Section */
+/* Post Detail */
 .post-detail {
     background: rgba(27, 38, 59, 0.95);
     border-radius: 15px;
@@ -14,26 +14,72 @@
 
     .post-detail h1 {
         color: #00b4d8;
-        font-size: 1.8rem;
+        font-size: 2rem;
         margin-bottom: 15px;
     }
 
-.post-content {
-    color: #e0e1dd;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-    .post-content p {
-        margin: 0; /* Loại bỏ margin mặc định của Quill */
+    .post-detail .post-content {
+        color: #e0e1dd;
+        margin: 15px 0;
     }
 
-.post-meta {
-    color: #778da9;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
+    .post-detail .post-info {
+        font-size: 0.9rem;
+        color: #778da9;
+        margin-bottom: 15px;
+    }
+
+.vote-highlight {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #00b4d8;
+    background: rgba(0, 180, 216, 0.1);
+    padding: 3px 10px;
+    border-radius: 15px;
+    margin-left: 10px;
 }
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+    .post-actions .btn {
+        border-radius: 25px;
+        padding: 8px 15px;
+        transition: background 0.3s, transform 0.3s;
+    }
+
+.btn-vote {
+    background: #28a745;
+    border: none;
+}
+
+    .btn-vote:hover {
+        background: #218838;
+        transform: scale(1.05);
+    }
+
+.btn-share {
+    background: #00b4d8;
+    border: none;
+}
+
+    .btn-share:hover {
+        background: #4361ee;
+        transform: scale(1.05);
+    }
+
+.btn-report {
+    background: #dc3545;
+    border: none;
+}
+
+    .btn-report:hover {
+        background: #c82333;
+        transform: scale(1.05);
+    }
 
 /* Comments Section */
 .comments-section {
@@ -44,7 +90,7 @@
     margin-top: 20px;
 }
 
-    .comments-section h2 {
+    .comments-section h3 {
         color: #00b4d8;
         font-size: 1.5rem;
         margin-bottom: 15px;
@@ -53,18 +99,15 @@
 .comment-input {
     background: #1b263b;
     border: 1px solid #778da9;
-    color: #e0e1dd;
     border-radius: 10px;
     padding: 10px;
+    color: #e0e1dd;
     width: 100%;
-    min-height: 100px;
-    resize: vertical;
+    margin-bottom: 15px;
 }
 
-    .comment-input:focus {
-        outline: none;
-        border-color: #00b4d8;
-        box-shadow: 0 0 5px rgba(0, 180, 216, 0.5);
+    .comment-input::placeholder {
+        color: #778da9;
     }
 
 .btn-comment {
@@ -72,9 +115,7 @@
     border: none;
     border-radius: 25px;
     padding: 10px 20px;
-    color: #fff;
     transition: background 0.3s;
-    margin-top: 10px;
 }
 
     .btn-comment:hover {
@@ -86,7 +127,7 @@
 }
 
 .comment-item {
-    background: rgba(255, 255, 255, 0.05);
+    background: #415a77;
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 15px;
@@ -99,6 +140,7 @@
 
     .comment-item small {
         color: #778da9;
+        font-size: 0.9rem;
     }
 
 /* Responsive */
@@ -107,15 +149,8 @@
         padding: 15px;
     }
 
-        .post-detail h1 {
-            font-size: 1.5rem;
-        }
-
-    .post-content {
-        font-size: 1rem;
-    }
-
-    .comments-section h2 {
-        font-size: 1.3rem;
+    .post-actions {
+        flex-direction: column;
+        gap: 10px;
     }
 }
