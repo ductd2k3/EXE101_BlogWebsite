@@ -24,15 +24,31 @@ namespace LingoVerse.Pages.User
                 Email = form["email"],
                 PasswordHash = form["password"]
             };
+
             var userLogin = await _userService.LoginAsync(user);
-            if(userLogin == null)
+            if (userLogin == null)
             {
                 TempData["ErrorMessage"] = "Tài khoản không tồn tại!";
                 return Page();
             }
-            HttpContext.Session.SetString("UserSession",JsonSerializer.Serialize(userLogin));
-            //HttpContext.Session.SetString("UserSession", JsonConvert.SerializeObject(user));
-            return RedirectToPage("/User/Home");
+
+            // Lưu thông tin người dùng vào session
+            HttpContext.Session.SetString("UserSession", JsonSerializer.Serialize(userLogin));
+
+            // Kiểm tra RoleId để chuyển hướng
+            if (userLogin.RoleId == 1)
+            {
+                return RedirectToPage("/Manager/Admin-Dashboard"); // Trang admin
+            }
+            else if (userLogin.RoleId == 2)
+            {
+                return RedirectToPage("/User/Home"); // Trang home của user
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Vai trò không hợp lệ!";
+                return Page(); // Trở lại trang login nếu RoleId không xác định
+            }
         }
     }
 }

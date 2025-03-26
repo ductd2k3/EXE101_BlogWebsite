@@ -1,7 +1,194 @@
 ﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model LingoVerse.Pages.Manager.Admin_ManagePremiumModel
 @{
+    Layout = "_AdminLayout";
 }
 <head>
-    <link rel="stylesheet" href="~/css/PostDetail.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Manage_Language.css" asp-append-version="true" />
 </head>
+<!-- Language List -->
+<div class="main-content">
+    <div class="header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Quản lý thanh toán</h2>
+            <div>
+                <span class="me-3"><i class="fas fa-user-circle"></i> Admin</span>
+                <button class="btn btn-custom"><i class="fas fa-bell"></i></button>
+            </div>
+        </div>
+    </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title">Danh sách các gói</h5>
+                    <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
+                        <i class="fas fa-plus me-2"></i> Thêm cấp độ
+                    </button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên gói</th>
+                            <th>Miêu tả</th>
+                            <th>Ngày kích hoạt</th>
+                            <th>Giá</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var premium in Model.PremiumPlans)
+                        {
+                            <tr data-plan-id="@premium.PlanId"
+                                data-plan-name="@premium.PlanName"
+                                data-description="@premium.Description"
+                                data-duration="@premium.DurationDays"
+                                data-price="@premium.Price">
+                                <td>@premium.PlanId</td>
+                                <td>@premium.PlanName</td>
+                                <td>@premium.Description</td>
+                                <td>@premium.DurationDays</td>
+                                <td>@premium.Price</td>
+                                <td>
+                                    <button class="btn btn-custom btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#editLanguageModal">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Thêm Gói -->
+<div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addLanguageModalLabel">Thêm gói</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="addLanguageName" class="form-label">Tên gói</label>
+                        <input type="text" class="form-control" id="addLanguageName" placeholder="Nhập tên cấp độ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addLanguageCode" class="form-label">Mô tả</label>
+                        <input type="text" class="form-control" id="addLanguageCode" placeholder="Nhập mô tả">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addPrimiumDurations" class="form-label">Ngày kích hoạt</label>
+                        <input type="number" class="form-control" id="addPrimiumDurations" min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addPrimiumPrice" class="form-label">Giá</label>
+                        <input type="number" class="form-control" id="addPrimiumPrice" min="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-custom" id="saveNewPlan">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Sửa Gói -->
+<div class="modal fade" id="editLanguageModal" tabindex="-1" aria-labelledby="editLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLanguageModalLabel">Sửa các gói</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="UpdatePlan">
+                    <input type="hidden" id="editPlanId" name="PlanId">
+                    <div class="mb-3">
+                        <label for="editLanguageName" class="form-label">Tên gói</label>
+                        <input type="text" class="form-control" id="editLanguageName" name="PlanName" placeholder="Nhập tên cấp độ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLanguageCode" class="form-label">Mô tả</label>
+                        <input type="text" class="form-control" id="editLanguageCode" name="Description" placeholder="Nhập mô tả">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrimiumDurations" class="form-label">Ngày kích hoạt</label>
+                        <input type="number" class="form-control" id="editPrimiumDurations" name="DurationDays" min="1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrimiumPrice" class="form-label">Giá</label>
+                        <input type="number" class="form-control" id="editPrimiumPrice" name="Price" min="1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-custom">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script xử lý phía client -->
+<script>
+    // Xử lý nút "Sửa" để điền dữ liệu vào modal
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            let row = this.closest('tr');
+            let planId = row.dataset.planId;
+            let planName = row.dataset.planName;
+            let description = row.dataset.description;
+            let duration = row.dataset.duration;
+            let price = row.dataset.price;
+
+            document.getElementById('editPlanId').value = planId;
+            document.getElementById('editLanguageName').value = planName;
+            document.getElementById('editLanguageCode').value = description;
+            document.getElementById('editPrimiumDurations').value = duration;
+            document.getElementById('editPrimiumPrice').value = price;
+        });
+    });
+
+    // Xử lý nút "Lưu" trong modal Thêm gói
+    document.getElementById('saveNewPlan').addEventListener('click', function () {
+        let planName = document.getElementById('addLanguageName').value;
+        let description = document.getElementById('addLanguageCode').value;
+        let duration = document.getElementById('addPrimiumDurations').value;
+        let price = document.getElementById('addPrimiumPrice').value;
+
+        if (planName && description && duration && price) {
+            alert(`Đã thêm gói: ${planName}\nMô tả: ${description}\nNgày kích hoạt: ${duration}\nGiá: ${price}`);
+            document.querySelector('#addLanguageModal .btn-close').click();
+            document.querySelector('#addLanguageModal form').reset();
+        } else {
+            alert('Vui lòng điền đầy đủ thông tin!');
+        }
+    });
+</script>

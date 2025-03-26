@@ -44,6 +44,9 @@ namespace LingoVerse
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+            builder.Services.AddScoped<IUserPremiumSubscriptionsService, UserPremiumSubscriptionsService>();
+            builder.Services.AddScoped<IUserPremiumSubscriptionsRepository, UserPremiumSubscriptionsRepository>();
+
             builder.Services.AddScoped<IEmailService, EmailService>();
 
             var app = builder.Build();

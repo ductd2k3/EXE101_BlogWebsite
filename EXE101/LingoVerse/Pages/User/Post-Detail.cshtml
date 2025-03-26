@@ -209,7 +209,7 @@
 <script>
     // Quản lý trạng thái Premium
     const accountManager = {
-        isPremium: true, // Trạng thái tài khoản (true = Premium)
+        isPremium: @Model.IsPremium.ToString().ToLower(), // Trạng thái tài khoản (true = Premium)
         overlay: document.getElementById("premium-overlay"),
         upgradeBtn: document.getElementById("upgrade-btn"),
 
@@ -221,8 +221,7 @@
         },
 
         handleUpgrade() {
-            alert("Chuyển hướng đến trang nâng cấp tài khoản!");
-            // Logic nâng cấp thực tế có thể thêm ở đây
+            window.location.href = '/User/Premium';
         }
     };
 
